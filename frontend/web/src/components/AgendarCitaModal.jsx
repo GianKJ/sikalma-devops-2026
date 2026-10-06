@@ -202,8 +202,9 @@ export default function AgendarCitaModal({ initialServicio, initialPsicologo, on
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.25rem' }}>Fecha de Cita</label>
+          <label htmlFor="fechaCita" style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.25rem' }}>Fecha de Cita</label>
           <input 
+            id="fechaCita"
             type="date" 
             name="fecha" 
             value={formData.fecha} 
