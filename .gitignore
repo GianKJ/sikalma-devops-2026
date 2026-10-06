@@ -28,10 +28,12 @@ target/
 ### VS Code ###
 .vscode/
 
-### Operating System ###
+### Operating System & Office ###
 Thumbs.db
 Desktop.ini
 .DS_Store
+~$*
+*.tmp
 
 ### Environment & Secrets ###
 .env
