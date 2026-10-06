@@ -18,12 +18,14 @@ describe('AgendarCitaModal - Pruebas de Validación y Reserva', () => {
     const inputNombres = screen.getByPlaceholderText(/Ej. Juan Carlos/i);
     const inputApellidos = screen.getByPlaceholderText(/Ej. Pérez Gómez/i);
     const inputTel = screen.getByPlaceholderText(/Ej. 951 234 567/i);
+    const inputFecha = screen.getByLabelText(/Fecha de Cita/i, { selector: 'input' });
     const btnSubmit = screen.getByRole('button', { name: /Confirmar Reserva de Cita/i });
 
     fireEvent.change(inputDni, { target: { value: '123' } }); // DNI inválido
     fireEvent.change(inputNombres, { target: { value: 'Ana' } });
     fireEvent.change(inputApellidos, { target: { value: 'Ríos' } });
     fireEvent.change(inputTel, { target: { value: '987654321' } });
+    fireEvent.change(inputFecha, { target: { value: '2026-10-15' } });
     
     fireEvent.click(btnSubmit);
 
