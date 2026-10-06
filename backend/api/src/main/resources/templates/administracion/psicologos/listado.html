@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Psicólogos | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('psicologos')}"></div>
+<main class="admin-content">
+    <header class="admin-header admin-header--actions">
+        <div><p class="admin-eyebrow">Equipo profesional</p><h1>Gestión de psicólogos</h1></div>
+        <a class="button button--primary" th:href="@{/admin/psicologos/nuevo}">Nuevo psicólogo</a>
+    </header>
+
+    <div class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}" role="status"></div>
+
+    <section class="admin-section" aria-labelledby="psicologos-titulo">
+        <div class="admin-section__heading">
+            <div><h2 id="psicologos-titulo">Profesionales registrados</h2><p>Modalidad, especialidades y estado operativo.</p></div>
+        </div>
+        <form class="filter-bar" method="get" th:action="@{/admin/psicologos}">
+            <label class="sr-only" for="buscar-psicologo">Buscar psicólogo</label>
+            <input id="buscar-psicologo" type="search" name="buscar" th:value="${buscar}" placeholder="Documento, nombres o apellidos">
+            <button class="button button--secondary" type="submit">Buscar</button>
+        </form>
+        <div class="table-frame">
+            <div class="table-scroll">
+                <table>
+                    <thead><tr><th>Documento</th><th>Psicólogo</th><th>Colegiatura</th><th>Modalidad</th><th>Especialidades</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>
+                    <tr th:each="psicologo : ${psicologos}">
+                        <td th:text="${psicologo.tipoDocumento.etiqueta + ' ' + psicologo.numeroDocumento}"></td>
+                        <td><strong th:text="${psicologo.apellidos + ', ' + psicologo.nombres}"></strong><span class="cell-note" th:text="${psicologo.correo ?: 'Sin correo'}"></span></td>
+                        <td th:text="${psicologo.colegiatura ?: 'No registrada'}"></td>
+                        <td th:text="${psicologo.modalidad.etiqueta}"></td>
+                        <td>
+                            <span th:if="${#sets.isEmpty(psicologo.especialidades)}">Sin asignar</span>
+                            <th:block th:unless="${#sets.isEmpty(psicologo.especialidades)}"
+                                      th:each="especialidad, iterador : ${psicologo.especialidades}">
+                                <span th:text="${especialidad.nombre}"></span><span th:if="${!iterador.last}">, </span>
+                            </th:block>
+                        </td>
+                        <td><span class="status" th:classappend="${psicologo.activo} ? 'status--active' : 'status--inactive'" th:text="${psicologo.activo ? 'Activo' : 'Inactivo'}"></span></td>
+                        <td class="row-actions">
+                            <a th:href="@{/admin/psicologos/{id}/editar(id=${psicologo.id})}">Editar</a>
+                            <form th:action="@{/admin/psicologos/{id}/estado(id=${psicologo.id})}" method="post">
+                                <button type="submit" th:text="${psicologo.activo ? 'Desactivar' : 'Activar'}"></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(psicologos)}"><td class="table-empty-cell" colspan="7">No hay psicólogos registrados.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

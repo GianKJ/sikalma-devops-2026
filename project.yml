@@ -1,0 +1,19 @@
+project:
+  name: sikalma-gestion-clinica
+  version: 1.0.0
+  description: Sistema Web para la Gestion Integral de Citas, Fichas de Atencion e Historias Clinicas en el Centro Psicologico Sikalma
+  authors: Sanchez Vilchez Giancarlo Robert, Cavero Ayzana Aldheyr Mitsui, Ramirez Soto Juan Diego
+
+stack:
+  frontend: auto
+  backend: auto
+  python: auto
+
+database:
+  engine: postgresql
+
+quality:
+  sonar: true
+
+security:
+  trivy: true

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>No se pudo completar la solicitud | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/sitio.css}">
+</head>
+<body>
+<main class="error-page">
+    <section class="error-card">
+        <span class="error-code">500</span>
+        <h1>No pudimos completar la solicitud</h1>
+        <p>Ocurrió un problema inesperado. Intenta nuevamente dentro de unos minutos.</p>
+        <a class="button button--primary" th:href="@{/}">Volver al inicio</a>
+    </section>
+</main>
+</body>
+</html>

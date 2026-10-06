@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" th:content="${sikalma.descripcion}">
+    <title th:text="${sikalma.nombre} + ' | Huánuco'">Centro Psicológico SIKALMA | Huánuco</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/sitio.css}">
+    <script defer th:src="@{/js/sitio.js}"></script>
+</head>
+<body>
+<div th:replace="~{fragmentos/cabecera :: cabecera}"></div>
+
+<main>
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+        <div class="hero__content reveal">
+            <div class="hero__copy">
+                <span class="eyebrow" th:text="${sikalma.ciudad} + ', ' + ${sikalma.pais}">Huánuco, Perú</span>
+                <h1 th:text="${sikalma.nombre}">Centro Psicológico SIKALMA</h1>
+                <p class="hero__tagline" th:text="${sikalma.lema}">Tu refugio de calma y equilibrio emocional</p>
+                <p class="hero__description" th:text="${sikalma.descripcion}">
+                    Atención psicológica integral, cálida y profesional para cada etapa de la vida.
+                </p>
+                <div class="hero__actions">
+                    <a class="button button--primary" th:href="${sikalma.whatsappUrl}" target="_blank"
+                       rel="noopener noreferrer">Reservar cita</a>
+                    <a class="button button--secondary" href="#nosotros">Conoce más</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOSOTROS -->
+    <section class="section section--nosotros" id="nosotros">
+        <div class="section__inner">
+            <div class="nosotros-layout reveal">
+                <div class="nosotros-text">
+                    <span class="eyebrow">Nuestra Historia</span>
+                    <h2>Un espacio diferente para el cuidado de tu salud mental</h2>
+                    <p>SIKALMA nace con el propósito de crear un espacio donde las personas no solo reciban atención profesional, sino donde también puedan sentirse escuchadas, respetadas y acompañadas.</p>
+                    <p>Con el tiempo, hemos ido creciendo y ampliando nuestros servicios para acompañar a niños, adolescentes, adultos, parejas y familias, incorporando también propuestas orientadas al desarrollo infantil y al bienestar integral. Cada persona tiene una historia diferente y merece un espacio donde pueda ser escuchada sin juicios.</p>
+                </div>
+                <div class="nosotros-cards">
+                    <div class="mission-card">
+                        <h3>Misión</h3>
+                        <p>Brindar atención psicológica integral, cálida y profesional a niños, adolescentes, adultos, parejas y familias, ofreciendo un espacio seguro donde cada persona pueda sentirse escuchada, comprendida y acompañada para construir una mejor calidad de vida.</p>
+                    </div>
+                    <div class="vision-card">
+                        <h3>Visión</h3>
+                        <p>Ser un centro psicológico reconocido en nuestra comunidad por brindar una atención humana, ética y profesional, contribuyendo al cuidado de la salud mental y promoviendo una cultura donde este cuidado sea parte esencial del bienestar personal y familiar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALORES -->
+    <section class="section section--muted section--valores" id="valores">
+        <div class="section__inner">
+            <div class="section__heading reveal">
+                <span class="eyebrow">Nuestros Valores</span>
+                <h2>Principios que nos guían</h2>
+            </div>
+            <div class="values-grid">
+                <article class="value-card reveal">
+                    <div class="value-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+                    <h3>Empatía</h3>
+                    <p>Escuchamos y comprendemos a cada persona desde su propia historia y realidad.</p>
+                </article>
+                <article class="value-card reveal">
+                    <div class="value-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+                    <h3>Respeto</h3>
+                    <p>Valoramos la individualidad, las experiencias y las decisiones de cada persona.</p>
+                </article>
+                <article class="value-card reveal">
+                    <div class="value-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h2v5zm0 4h-2v-2h2v2z"/></svg></div>
+                    <h3>Profesionalismo</h3>
+                    <p>Brindamos una atención responsable, ética y basada en conocimientos psicológicos.</p>
+                </article>
+                <article class="value-card reveal">
+                    <div class="value-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg></div>
+                    <h3>Calidez humana</h3>
+                    <p>Creemos que una atención profesional también puede ser cercana, amable y acogedora.</p>
+                </article>
+                <article class="value-card reveal">
+                    <div class="value-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+                    <h3>Compromiso</h3>
+                    <p>Nos comprometemos con el proceso y bienestar de cada persona que confía en nosotros.</p>
+                </article>
+                <article class="value-card reveal">
+                    <div class="value-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
+                    <h3>Confidencialidad</h3>
+                    <p>Protegemos la privacidad y la información compartida durante el proceso de atención.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="section section--servicios" id="servicios">
+        <div class="section__inner">
+            <div class="section__heading reveal">
+                <span class="eyebrow">Servicios</span>
+                <h2>¿Cómo podemos ayudarte?</h2>
+                <div class="modalidades-badge" th:if="${not #lists.isEmpty(sikalma.modalidades)}">
+                    Modalidades: <span th:each="modalidad, iterStat : ${sikalma.modalidades}" th:text="${!iterStat.last ? modalidad + ' y ' : modalidad}"></span>
+                </div>
+            </div>
+            
+            <div class="services-grid">
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M12 14c-4.42 0-8 2.24-8 4v2h16v-2c0-1.76-3.58-4-8-4z"/></svg></div>
+                    <h3>Terapia Infantil</h3>
+                    <span class="service-target">Niños</span>
+                    <p>Atención especializada para abordar dificultades emocionales y conductuales en la infancia.</p>
+                </article>
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+                    <h3>Terapia de Pareja</h3>
+                    <span class="service-target">Parejas</span>
+                    <p>Espacio para mejorar la comunicación, resolver conflictos y fortalecer el vínculo amoroso.</p>
+                </article>
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+                    <h3>Terapia Individual</h3>
+                    <span class="service-target">Adolescentes, jóvenes y adultos</span>
+                    <p>Acompañamiento para superar crisis, ansiedad, depresión y desarrollo personal.</p>
+                </article>
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9 10h18v-2c0-2.66-5.33-4-9-4s-9 1.34-9 4v2z"/></svg></div>
+                    <h3>Terapia Familiar</h3>
+                    <span class="service-target">Familias</span>
+                    <p>Intervención para mejorar la dinámica familiar y el bienestar de todos sus miembros.</p>
+                </article>
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
+                    <h3>Orientación Vocacional</h3>
+                    <span class="service-target">Adolescentes y jóvenes</span>
+                    <p>Guía profesional para el descubrimiento y elección de un camino profesional acorde a tu perfil.</p>
+                </article>
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm1-11h-2v4l3.5 2.1.75-1.23-2.25-1.37V8z"/></svg></div>
+                    <h3>Estimulación Temprana</h3>
+                    <span class="service-target">Primera infancia (Presencial)</span>
+                    <p>Actividades para potenciar el desarrollo cognitivo y motor en los primeros años de vida.</p>
+                </article>
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg></div>
+                    <h3>Terapia de Lenguaje</h3>
+                    <span class="service-target">Niños</span>
+                    <p>Diagnóstico y tratamiento de dificultades en la comunicación y el habla.</p>
+                </article>
+                <article class="service-card reveal">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.7 1.4z"/></svg></div>
+                    <h3>Terapia Física y Rehabilitación</h3>
+                    <span class="service-target">Adolescentes y adultos (Presencial)</span>
+                    <p>Recuperación del movimiento, alivio del dolor y mejora de la calidad de vida física.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- METODOLOGÍA -->
+    <section class="section section--muted section--metodologia" id="metodologia">
+        <div class="section__inner">
+            <div class="section__heading reveal">
+                <span class="eyebrow">Cómo trabajamos</span>
+                <h2>Nuestra Metodología</h2>
+                <p>Un proceso estructurado para acompañarte en tu camino hacia el bienestar.</p>
+            </div>
+            
+            <div class="stepper">
+                <div class="step reveal">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Primera entrevista</h3>
+                        <p>Espacio de escucha y acogida inicial.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Evaluación psicológica</h3>
+                        <p>Entrevistas, observación y herramientas psicológicas.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Devolución y orientación</h3>
+                        <p>Presentación de hallazgos de manera clara y comprensible.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>Plan de intervención</h3>
+                        <p>Personalizado según necesidades y objetivos.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-number">05</div>
+                    <div class="step-content">
+                        <h3>Acompañamiento terapéutico</h3>
+                        <p>Desarrollo de herramientas y recursos personales.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-number">06</div>
+                    <div class="step-content">
+                        <h3>Seguimiento y evolución</h3>
+                        <p>Revisión de avances periódicos y ajustes.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-number">07</div>
+                    <div class="step-content">
+                        <h3>Cierre del proceso</h3>
+                        <p>Revisión final de los logros alcanzados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EQUIPO -->
+    <section class="section section--equipo" id="equipo">
+        <div class="section__inner">
+            <div class="section__heading reveal">
+                <span class="eyebrow">Nuestros Profesionales</span>
+                <h2>Conoce a nuestro equipo</h2>
+            </div>
+            <div class="team-grid">
+                <article class="team-card reveal">
+                    <div class="team-avatar">MV</div>
+                    <h3>Maryory V. Sánchez Vílchez</h3>
+                    <span class="team-role">Psicóloga / CEO (Col. 61905)</span>
+                    <p>Especialización en terapia de parejas, psicoterapéutica sistémica, TREC, TCC y abordaje terapéutico en duelo.</p>
+                </article>
+                <article class="team-card reveal">
+                    <div class="team-avatar">JC</div>
+                    <h3>Judith Campos Pomachagua</h3>
+                    <span class="team-role">Psicóloga</span>
+                    <p>Especialista en TEA y análisis de conducta.</p>
+                </article>
+                <article class="team-card reveal">
+                    <div class="team-avatar">AP</div>
+                    <h3>Antony Pérez Fernández</h3>
+                    <span class="team-role">Fisioterapeuta</span>
+                    <p>Terapia física, rehabilitación y terapia ocupacional.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="section section--contact" id="contacto">
+        <div class="section__inner contact-layout reveal">
+            <div class="contact-info">
+                <span class="eyebrow">Contacto</span>
+                <h2>Inicia tu camino hacia el bienestar</h2>
+                <p class="section__text">Nuestro equipo te ayudará a coordinar el servicio, profesional y modalidad adecuados para ti o tu familia.</p>
+                <div class="hero__actions" style="margin-top: 2rem;">
+                    <a class="button button--primary" th:href="${sikalma.whatsappUrl}" target="_blank"
+                       rel="noopener noreferrer">
+                       <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="margin-right: 8px; vertical-align: middle;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                       Escribir por WhatsApp
+                    </a>
+                </div>
+            </div>
+            <dl class="contact-list">
+                <div>
+                    <dt>Dirección</dt>
+                    <dd th:text="${sikalma.direccion}">Calle Los Tulipanes 112, Amarilis, Huánuco</dd>
+                </div>
+                <div>
+                    <dt>Horario</dt>
+                    <dd th:text="${sikalma.horario}">Lunes a sábado</dd>
+                </div>
+                <div>
+                    <dt>Teléfono</dt>
+                    <dd><a th:href="${'tel:+51' + #strings.replace(sikalma.telefono, ' ', '')}"
+                           th:text="${sikalma.telefono}">993 668 057</a></dd>
+                </div>
+                <div>
+                    <dt>Correo</dt>
+                    <dd><a th:href="|mailto:${sikalma.correo}|" th:text="${sikalma.correo}">Correo</a></dd>
+                </div>
+                <div class="map-placeholder">
+                    <p>Ver en Google Maps</p>
+                </div>
+            </dl>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragmentos/pie :: pie}"></div>
+</body>
+</html>

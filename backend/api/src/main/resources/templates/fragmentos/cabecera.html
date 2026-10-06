@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="site-header" th:fragment="cabecera">
+    <div class="site-header__inner">
+        <a class="brand" th:href="@{/}" aria-label="Ir al inicio de SIKALMA">
+            <img class="brand__mark" th:src="@{/img/isotipo-sikalma.png}" alt="Logo Isotipo">
+            <span class="brand__text">
+                <strong class="brand__name">SIKALMA</strong>
+                <small class="brand__detail">Centro Psicológico</small>
+            </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navegacion-principal"
+                data-menu-button>
+            <span class="sr-only">Abrir menú</span>
+            <span class="menu-toggle__line"></span>
+            <span class="menu-toggle__line"></span>
+            <span class="menu-toggle__line"></span>
+        </button>
+
+        <nav class="site-nav" id="navegacion-principal" aria-label="Navegación principal" data-menu>
+            <a th:href="@{/#inicio}">Inicio</a>
+            <a th:href="@{/#nosotros}">Nosotros</a>
+            <a th:href="@{/#servicios}">Servicios</a>
+            <a th:href="@{/#metodologia}">Metodología</a>
+            <a th:href="@{/#equipo}">Equipo</a>
+            <a th:href="@{/#contacto}">Contacto</a>
+            <a class="site-nav__login" th:href="@{/login}">Ingresar</a>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

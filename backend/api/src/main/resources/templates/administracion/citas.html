@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Citas | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('citas')}"></div>
+
+<main class="admin-content">
+    <header class="admin-header">
+        <div>
+            <p class="admin-eyebrow">Agenda</p>
+            <h1>Gestión de citas</h1>
+        </div>
+        <span class="role-label">Administrador</span>
+    </header>
+
+    <section class="admin-section" aria-labelledby="listado-citas-titulo">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="listado-citas-titulo">Citas registradas</h2>
+                <p>Información administrativa de la agenda.</p>
+            </div>
+        </div>
+
+        <div class="table-frame table-frame--empty">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Paciente</th>
+                        <th>Profesional</th>
+                        <th>Servicio</th>
+                        <th>Modalidad</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="table-empty-state" role="status">
+                <strong>No hay citas registradas.</strong>
+                <span>La agenda se mostrará aquí cuando existan registros en la base de datos.</span>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title th:text="${formulario.id == null ? 'Nueva especialidad | SIKALMA' : 'Editar especialidad | SIKALMA'}"></title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}"><link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('especialidades')}"></div>
+<main class="admin-content">
+    <header class="admin-header admin-header--actions"><div><p class="admin-eyebrow">Catálogo</p><h1 th:text="${formulario.id == null ? 'Registrar especialidad' : 'Editar especialidad'}"></h1></div><a class="button button--secondary" th:href="@{/admin/especialidades}">Cancelar</a></header>
+    <section class="admin-section form-section">
+        <form class="entity-form entity-form--compact" th:action="@{/admin/especialidades/guardar}" th:object="${formulario}" method="post" novalidate>
+            <input type="hidden" th:field="*{id}">
+            <div class="form-error-summary" th:if="${#fields.hasAnyErrors()}" role="alert">Revisa los campos señalados.</div>
+            <fieldset><legend>Datos de la especialidad</legend><div class="form-grid">
+                <div class="field field--wide"><label for="nombre">Nombre</label><input id="nombre" type="text" th:field="*{nombre}" maxlength="120"><span class="field-error" th:errors="*{nombre}"></span></div>
+                <div class="field field--wide"><label for="descripcion">Descripción</label><textarea id="descripcion" th:field="*{descripcion}" maxlength="500" rows="4"></textarea><span class="field-error" th:errors="*{descripcion}"></span></div>
+            </div></fieldset>
+            <div class="form-actions"><a class="button button--secondary" th:href="@{/admin/especialidades}">Cancelar</a><button class="button button--primary" type="submit">Guardar especialidad</button></div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

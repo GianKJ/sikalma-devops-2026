@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de Instalación y Ejecución — SIKALMA</title>
+<style>
+  @page { margin: 2cm; size: A4; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #222; max-width: 800px; margin: 0 auto; padding: 2rem; }
+  h1 { font-size: 22pt; color: #57402e; margin-bottom: 6px; border-bottom: 3px solid #fac8a9; padding-bottom: 10px; }
+  .subtitle { font-size: 12pt; color: #75685e; margin-bottom: 2rem; }
+  h2 { font-size: 15pt; color: #315f58; margin: 2rem 0 0.8rem; padding-bottom: 4px; border-bottom: 1px solid #d9dddb; page-break-after: avoid; }
+  h3 { font-size: 12pt; color: #57402e; margin: 1.2rem 0 0.5rem; }
+  p, li { margin-bottom: 0.6rem; }
+  ol, ul { padding-left: 1.5rem; }
+  ol > li { margin-bottom: 0.8rem; }
+  code { background: #f4f6f5; padding: 2px 6px; border-radius: 3px; font-family: 'Consolas', 'Courier New', monospace; font-size: 10pt; color: #315f58; }
+  pre { background: #1e1e1e; color: #d4d4d4; padding: 14px 18px; border-radius: 6px; overflow-x: auto; margin: 0.8rem 0 1.2rem; font-size: 9.5pt; line-height: 1.5; page-break-inside: avoid; }
+  pre code { background: none; color: inherit; padding: 0; }
+  .note { background: #e7f3ef; border-left: 4px solid #315f58; padding: 12px 16px; border-radius: 4px; margin: 1rem 0; font-size: 10pt; }
+  .warning { background: #fff5ec; border-left: 4px solid #d68651; padding: 12px 16px; border-radius: 4px; margin: 1rem 0; font-size: 10pt; }
+  .warning strong, .note strong { display: block; margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 10pt; }
+  th, td { border: 1px solid #d9dddb; padding: 8px 12px; text-align: left; }
+  th { background: #f4f6f5; color: #57402e; font-weight: 700; }
+  .url-box { background: #315f58; color: white; padding: 10px 16px; border-radius: 6px; font-family: monospace; font-size: 11pt; margin: 0.5rem 0; display: inline-block; }
+  .step-img { text-align: center; margin: 1rem 0; color: #75685e; font-style: italic; font-size: 10pt; }
+  .header-meta { display: flex; justify-content: space-between; margin-bottom: 2rem; font-size: 9pt; color: #75685e; }
+  .cover { text-align: center; padding: 3rem 0 2rem; }
+  .cover img { width: 100px; margin-bottom: 1rem; }
+  .page-break { page-break-before: always; }
+  @media print { body { padding: 0; } .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1>GUÍA DE INSTALACIÓN Y EJECUCIÓN</h1>
+  <p class="subtitle">Sistema Web SIKALMA — Centro Psicológico</p>
+  <p class="subtitle">Huánuco, Perú</p>
+  <br>
+  <table style="width: 60%; margin: 1rem auto;">
+    <tr><th>Proyecto</th><td>SIKALMA — Sistema de Gestión Integral</td></tr>
+    <tr><th>Tecnología</th><td>Java 21, Spring Boot 3.5, Thymeleaf, SQL Server</td></tr>
+    <tr><th>IDE</th><td>Visual Studio Code</td></tr>
+    <tr><th>Fecha</th><td>Septiembre 2026</td></tr>
+  </table>
+</div>
+
+<!-- TABLA DE CONTENIDOS -->
+<h2>Tabla de Contenidos</h2>
+<ol>
+  <li>Requisitos previos</li>
+  <li>Instalar Java 21 (JDK)</li>
+  <li>Instalar y configurar SQL Server</li>
+  <li>Crear la base de datos y el usuario</li>
+  <li>Instalar Visual Studio Code y extensiones</li>
+  <li>Descomprimir y abrir el proyecto</li>
+  <li>Configurar las credenciales (.env)</li>
+  <li>Ejecutar el proyecto (Método 1: F5 en VS Code)</li>
+  <li>Ejecutar el proyecto (Método 2: Terminal PowerShell)</li>
+  <li>Abrir SIKALMA en el navegador (localhost)</li>
+  <li>Usar el panel de administración</li>
+  <li>Detener la aplicación</li>
+  <li>Solución de problemas comunes</li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- PASO 1 -->
+<h2>1. Requisitos Previos</h2>
+<p>Antes de comenzar, asegúrate de tener acceso a una computadora con Windows 10 o superior. Necesitarás instalar los siguientes programas:</p>
+
+<table>
+  <tr><th>Programa</th><th>Versión mínima</th><th>¿Para qué sirve?</th></tr>
+  <tr><td>Java JDK</td><td>21</td><td>Lenguaje en el que está construido SIKALMA</td></tr>
+  <tr><td>SQL Server</td><td>2019 o superior</td><td>Base de datos donde se guardan pacientes, citas, etc.</td></tr>
+  <tr><td>SQL Server Management Studio</td><td>19 o superior</td><td>Herramienta visual para administrar la base de datos</td></tr>
+  <tr><td>Visual Studio Code</td><td>Última versión</td><td>Editor de código para abrir y ejecutar el proyecto</td></tr>
+</table>
+
+<div class="note">
+  <strong>📌 Nota importante:</strong>
+  NO necesitas instalar Maven. El proyecto incluye un archivo llamado <code>mvnw.cmd</code> (Maven Wrapper) que descarga automáticamente la versión correcta de Maven.
+</div>
+
+<!-- PASO 2 -->
+<h2>2. Instalar Java 21 (JDK)</h2>
+<ol>
+  <li>Descarga Java JDK 21 desde <code>https://adoptium.net/</code> (Eclipse Temurin).</li>
+  <li>Ejecuta el instalador y marca la opción <strong>"Set JAVA_HOME variable"</strong>.</li>
+  <li>Completa la instalación.</li>
+  <li>Verifica que se instaló correctamente abriendo <strong>PowerShell</strong> y ejecutando:</li>
+</ol>
+<pre><code>java -version</code></pre>
+<p>Deberías ver algo como:</p>
+<pre><code>openjdk version "21.0.x" 2024-xx-xx LTS</code></pre>
+
+<div class="warning">
+  <strong>⚠️ Si no aparece Java 21:</strong>
+  Reinicia la computadora después de instalar Java. Si sigue sin funcionar, busca "Variables de entorno" en Windows y asegúrate de que <code>JAVA_HOME</code> apunte a la carpeta de instalación de Java 21.
+</div>
+
+<!-- PASO 3 -->
+<h2>3. Instalar y Configurar SQL Server</h2>
+<ol>
+  <li>Si ya tienes SQL Server instalado (como se ve en tu SSMS), puedes saltar este paso.</li>
+  <li>Si no, descarga <strong>SQL Server 2022 Express</strong> (gratuito) desde <code>https://www.microsoft.com/sql-server</code>.</li>
+  <li>Durante la instalación, selecciona <strong>"Basic"</strong>.</li>
+  <li>Después de instalar, abre <strong>SQL Server Configuration Manager</strong>.</li>
+  <li>Navega a <strong>SQL Server Network Configuration → Protocols for MSSQLSERVER</strong>.</li>
+  <li>Asegúrate de que <strong>TCP/IP esté habilitado</strong>.</li>
+  <li>Haz doble clic en TCP/IP, ve a la pestaña <strong>"IP Addresses"</strong>, y verifica que el puerto <strong>1433</strong> esté configurado en <strong>IPAll</strong>.</li>
+  <li>Reinicia el servicio de SQL Server.</li>
+</ol>
+
+<div class="note">
+  <strong>📌 Autenticación Mixta:</strong>
+  SQL Server debe estar configurado con <strong>autenticación de modo mixto</strong> (Windows + SQL Server) para que el usuario <code>sikalma_user</code> pueda conectarse.
+</div>
+
+<!-- PASO 4 -->
+<h2>4. Crear la Base de Datos y el Usuario</h2>
+
+<p>Abre <strong>SQL Server Management Studio (SSMS)</strong>, conéctate como <code>sa</code> (o cualquier cuenta administradora) y ejecuta el siguiente script:</p>
+
+<pre><code>USE master;
+GO
+
+-- Crear la base de datos (si no existe)
+IF DB_ID(N'sikalma_db') IS NULL
+BEGIN
+    CREATE DATABASE sikalma_db;
+END;
+GO
+
+-- Crear el login del usuario (si no existe)
+IF SUSER_ID(N'sikalma_user') IS NULL
+BEGIN
+    CREATE LOGIN sikalma_user
+        WITH PASSWORD = 'MiClaveSegura123',
+        CHECK_POLICY = ON,
+        CHECK_EXPIRATION = OFF;
+END;
+GO
+
+-- Asociar el usuario a la base de datos
+USE sikalma_db;
+GO
+
+IF DATABASE_PRINCIPAL_ID(N'sikalma_user') IS NULL
+BEGIN
+    CREATE USER sikalma_user FOR LOGIN sikalma_user;
+END;
+GO
+
+-- Dar permisos necesarios
+ALTER ROLE db_datareader ADD MEMBER sikalma_user;
+ALTER ROLE db_datawriter ADD MEMBER sikalma_user;
+ALTER ROLE db_ddladmin ADD MEMBER sikalma_user;
+GO</code></pre>
+
+<div class="warning">
+  <strong>⚠️ Importante — Cambia la contraseña:</strong>
+  Reemplaza <code>MiClaveSegura123</code> por una contraseña segura de tu elección. <strong>Recuerda esta contraseña</strong> porque la necesitarás en el paso 7.
+</div>
+
+<p>Este script también se encuentra en el proyecto en: <code>docs/sqlserver/00-crear-base-y-usuario.sql</code></p>
+
+<div class="page-break"></div>
+
+<!-- PASO 5 -->
+<h2>5. Instalar Visual Studio Code y Extensiones</h2>
+<ol>
+  <li>Descarga VS Code desde <code>https://code.visualstudio.com/</code>.</li>
+  <li>Instálalo con las opciones predeterminadas.</li>
+  <li>Abre VS Code.</li>
+  <li>Ve a la sección de <strong>Extensiones</strong> (icono de cuadrados en la barra lateral izquierda, o <code>Ctrl+Shift+X</code>).</li>
+  <li>Busca e instala estas extensiones:</li>
+</ol>
+
+<table>
+  <tr><th>Extensión</th><th>Descripción</th></tr>
+  <tr><td><strong>Extension Pack for Java</strong></td><td>Soporte completo para Java</td></tr>
+  <tr><td><strong>Spring Boot Extension Pack</strong></td><td>Herramientas para Spring Boot</td></tr>
+  <tr><td><strong>Maven for Java</strong></td><td>Soporte para Maven (se incluye con Extension Pack)</td></tr>
+</table>
+
+<div class="note">
+  <strong>📌 Tip:</strong>
+  Al abrir el proyecto, VS Code puede sugerir automáticamente instalar las extensiones recomendadas. Acepta la sugerencia.
+</div>
+
+<!-- PASO 6 -->
+<h2>6. Descomprimir y Abrir el Proyecto</h2>
+<ol>
+  <li>Localiza el archivo <code>SIKALMA.zip</code>.</li>
+  <li>Haz clic derecho → <strong>"Extraer todo..."</strong></li>
+  <li>Elige una ubicación (ejemplo: <code>D:\Proyecto sikalma\</code>).</li>
+  <li>Abre <strong>Visual Studio Code</strong>.</li>
+  <li>Ve a <strong>Archivo → Abrir carpeta...</strong></li>
+  <li>Navega hasta la carpeta extraída y selecciona la carpeta <code>sikalma</code> (la que contiene <code>pom.xml</code>).</li>
+  <li>Si VS Code pregunta <strong>"¿Confía en los autores?"</strong>, haz clic en <strong>Sí</strong>.</li>
+  <li>Espera 1-2 minutos a que Java y Maven importen el proyecto (verás actividad en la barra inferior).</li>
+</ol>
+
+<h3>Estructura que deberías ver en VS Code:</h3>
+<pre><code>sikalma/
+├── src/
+│   ├── main/
+│   │   ├── java/pe/com/sikalma/    ← Código Java
+│   │   └── resources/
+│   │       ├── templates/           ← Páginas HTML (Thymeleaf)
+│   │       ├── static/css/          ← Estilos CSS
+│   │       ├── static/js/           ← JavaScript
+│   │       ├── static/img/          ← Imágenes y logo
+│   │       ├── db/sqlserver/        ← Script de tablas
+│   │       └── application.properties
+│   └── test/                        ← Pruebas
+├── docs/                            ← Documentación
+├── pom.xml                          ← Configuración Maven
+├── mvnw.cmd                         ← Maven Wrapper (Windows)
+├── .env.example                     ← Plantilla de configuración
+└── README.md                        ← Descripción del proyecto</code></pre>
+
+<div class="page-break"></div>
+
+<!-- PASO 7 -->
+<h2>7. Configurar las Credenciales (.env)</h2>
+<p>Este es el paso más importante. Debes crear un archivo <code>.env</code> con las contraseñas locales.</p>
+
+<ol>
+  <li>En VS Code, abre la terminal integrada: <strong>Terminal → Nuevo terminal</strong> (o <code>Ctrl+Ñ</code>).</li>
+  <li>Ejecuta este comando para crear el archivo:</li>
+</ol>
+<pre><code>Copy-Item .env.example .env</code></pre>
+<ol start="3">
+  <li>Abre el archivo <code>.env</code> que se creó (haz clic en él en el explorador de archivos de VS Code).</li>
+  <li>Modifica SOLO estos dos valores:</li>
+</ol>
+
+<pre><code>SIKALMA_DB_HOST=localhost
+SIKALMA_DB_PORT=1433
+SIKALMA_DB_NAME=sikalma_db
+SIKALMA_DB_USER=sikalma_user
+SIKALMA_DB_PASSWORD=MiClaveSegura123        ← PON AQUÍ TU CLAVE DE SQL SERVER
+SIKALMA_DB_TRUST_CERTIFICATE=true
+SESSION_COOKIE_SECURE=false
+SPRING_SECURITY_USER_NAME=user
+SPRING_SECURITY_USER_PASSWORD=admin123      ← PON AQUÍ TU CLAVE PARA ENTRAR AL ADMIN
+SPRING_SECURITY_USER_ROLES=ADMINISTRADOR</code></pre>
+
+<div class="warning">
+  <strong>⚠️ Reglas del archivo .env:</strong>
+  <ul>
+    <li><code>SIKALMA_DB_PASSWORD</code> debe ser la misma contraseña que usaste en el paso 4 al crear el usuario en SQL Server.</li>
+    <li><code>SPRING_SECURITY_USER_PASSWORD</code> es la clave con la que entrarás al panel admin de SIKALMA.</li>
+    <li><strong>NUNCA compartas este archivo.</strong> Está excluido del ZIP por seguridad.</li>
+  </ul>
+</div>
+
+<!-- PASO 8 -->
+<h2>8. Ejecutar el Proyecto — Método 1: F5 en VS Code (Recomendado)</h2>
+<ol>
+  <li>Presiona <code>Ctrl+Shift+D</code> para abrir la sección <strong>Ejecutar y Depurar</strong>.</li>
+  <li>En el menú desplegable superior, selecciona <strong>"SIKALMA Desarrollo"</strong>.</li>
+  <li>Presiona el botón verde ▶️ o la tecla <strong>F5</strong>.</li>
+  <li>Espera a que la terminal muestre el mensaje:</li>
+</ol>
+<pre><code>Started SikalmaApplication in XX seconds</code></pre>
+<p>¡Eso significa que la aplicación está corriendo!</p>
+
+<!-- PASO 9 -->
+<h2>9. Ejecutar el Proyecto — Método 2: Terminal PowerShell</h2>
+<p>Si el método anterior no funciona, puedes ejecutar desde la terminal:</p>
+<ol>
+  <li>Abre una terminal en VS Code (<code>Ctrl+Ñ</code>).</li>
+  <li>Configura las variables de entorno y ejecuta:</li>
+</ol>
+<pre><code>$env:SIKALMA_DB_PASSWORD="MiClaveSegura123"
+$env:SPRING_SECURITY_USER_NAME="user"
+$env:SPRING_SECURITY_USER_PASSWORD="admin123"
+$env:SPRING_SECURITY_USER_ROLES="ADMINISTRADOR"
+.\mvnw.cmd spring-boot:run</code></pre>
+<ol start="3">
+  <li>Espera el mensaje <code>Started SikalmaApplication</code>.</li>
+</ol>
+
+<div class="note">
+  <strong>📌 Primera ejecución:</strong>
+  La primera vez que ejecutes el proyecto, Maven descargará todas las dependencias necesarias. Esto puede tardar <strong>3 a 5 minutos</strong> dependiendo de la velocidad de internet. Las siguientes ejecuciones serán mucho más rápidas.
+</div>
+
+<div class="page-break"></div>
+
+<!-- PASO 10 -->
+<h2>10. Abrir SIKALMA en el Navegador (localhost)</h2>
+
+<p>Una vez que veas el mensaje <code>Started SikalmaApplication</code>, abre <strong>Google Chrome</strong> (o cualquier navegador) y escribe en la barra de direcciones:</p>
+
+<p class="url-box">http://localhost:8080</p>
+
+<p>Verás la <strong>página pública de SIKALMA</strong> con las siguientes secciones:</p>
+<ul>
+  <li>Hero con el lema del centro</li>
+  <li>Historia, Misión y Visión</li>
+  <li>Valores (6 valores del centro)</li>
+  <li>Servicios (8 servicios psicológicos)</li>
+  <li>Metodología de atención (7 pasos)</li>
+  <li>Equipo profesional (3 profesionales)</li>
+  <li>Información de contacto</li>
+</ul>
+
+<h3>Para entrar al Panel de Administración:</h3>
+<p>Escribe en el navegador:</p>
+<p class="url-box">http://localhost:8080/login</p>
+
+<p>Ingresa las credenciales que configuraste en el archivo <code>.env</code>:</p>
+<table>
+  <tr><th>Campo</th><th>Valor</th></tr>
+  <tr><td>Usuario</td><td><code>user</code> (o el que configuraste en SPRING_SECURITY_USER_NAME)</td></tr>
+  <tr><td>Contraseña</td><td>La que configuraste en SPRING_SECURITY_USER_PASSWORD</td></tr>
+</table>
+
+<!-- PASO 11 -->
+<h2>11. Usar el Panel de Administración</h2>
+<p>Después de iniciar sesión, tendrás acceso al panel administrativo con las siguientes funcionalidades:</p>
+
+<table>
+  <tr><th>Módulo</th><th>URL</th><th>Funciones</th></tr>
+  <tr><td><strong>Dashboard</strong></td><td><code>/admin/inicio</code></td><td>Vista general con acceso a todos los módulos</td></tr>
+  <tr><td><strong>Citas</strong></td><td><code>/admin/citas</code></td><td>Gestión de la agenda del centro</td></tr>
+  <tr><td><strong>Pacientes</strong></td><td><code>/admin/pacientes</code></td><td>Crear, editar y listar pacientes</td></tr>
+  <tr><td><strong>Psicólogos</strong></td><td><code>/admin/psicologos</code></td><td>Crear, editar y listar profesionales</td></tr>
+  <tr><td><strong>Especialidades</strong></td><td><code>/admin/especialidades</code></td><td>Configurar áreas profesionales</td></tr>
+  <tr><td><strong>Servicios</strong></td><td><code>/admin/servicios</code></td><td>Gestionar servicios, modalidad y duración</td></tr>
+</table>
+
+<h3>Ejemplo: Crear un nuevo psicólogo</h3>
+<ol>
+  <li>Haz clic en <strong>"Psicólogos"</strong> en el menú lateral.</li>
+  <li>Haz clic en el botón <strong>"Nuevo psicólogo"</strong>.</li>
+  <li>Completa el formulario (nombres, apellidos, documento, teléfono, modalidad, especialidades).</li>
+  <li>Haz clic en <strong>"Guardar"</strong>.</li>
+  <li>El profesional quedará registrado en la base de datos SQL Server.</li>
+</ol>
+
+<h3>Ejemplo: Crear un nuevo paciente</h3>
+<ol>
+  <li>Haz clic en <strong>"Pacientes"</strong> en el menú lateral.</li>
+  <li>Haz clic en el botón <strong>"Nuevo paciente"</strong>.</li>
+  <li>Completa los datos (nombres, apellidos, DNI, fecha de nacimiento, teléfono, consentimiento).</li>
+  <li>Haz clic en <strong>"Guardar"</strong>.</li>
+  <li>El paciente quedará registrado en la base de datos.</li>
+</ol>
+
+<div class="note">
+  <strong>📌 Todo se guarda automáticamente:</strong>
+  Cada vez que creas o editas un registro, los datos se guardan directamente en la base de datos <code>sikalma_db</code> de SQL Server. Puedes verificarlo abriendo SSMS y consultando las tablas.
+</div>
+
+<!-- PASO 12 -->
+<h2>12. Detener la Aplicación</h2>
+<ul>
+  <li><strong>Si usaste F5:</strong> Haz clic en el botón rojo ⬛ de la barra de depuración, o presiona <code>Shift+F5</code>.</li>
+  <li><strong>Si usaste la terminal:</strong> Presiona <code>Ctrl+C</code> en la terminal donde está corriendo.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- PASO 13 -->
+<h2>13. Solución de Problemas Comunes</h2>
+
+<h3>❌ "Login failed for user 'sikalma_user'"</h3>
+<p><strong>Causa:</strong> La contraseña en <code>.env</code> no coincide con la del usuario en SQL Server.</p>
+<p><strong>Solución:</strong> Abre SSMS, conéctate como <code>sa</code> y ejecuta:</p>
+<pre><code>ALTER LOGIN sikalma_user WITH PASSWORD = 'TuNuevaClaveAqui';</code></pre>
+<p>Luego actualiza <code>SIKALMA_DB_PASSWORD</code> en el archivo <code>.env</code> con la misma contraseña.</p>
+
+<h3>❌ "El puerto 8080 está ocupado"</h3>
+<p><strong>Solución:</strong> Ejecuta en otro puerto:</p>
+<pre><code>$env:PORT="8081"
+.\mvnw.cmd spring-boot:run</code></pre>
+<p>Luego abre <code>http://localhost:8081</code> en el navegador.</p>
+
+<h3>❌ "java: command not found" o no reconoce Java</h3>
+<p><strong>Solución:</strong> Verifica la instalación con <code>java -version</code>. Debe mostrar Java 21. Si no, reinstala JDK 21 desde Adoptium y reinicia la PC.</p>
+
+<h3>❌ VS Code no carga el proyecto Java</h3>
+<p><strong>Solución:</strong> Presiona <code>Ctrl+Shift+P</code>, escribe <strong>"Java: Clean Java Language Server Workspace"</strong> y selecciónalo. Reinicia VS Code.</p>
+
+<h3>❌ "Cannot connect to SQL Server"</h3>
+<p><strong>Verificaciones:</strong></p>
+<ol>
+  <li>El servicio de SQL Server debe estar <strong>iniciado</strong> (busca "Servicios" en Windows).</li>
+  <li>TCP/IP debe estar <strong>habilitado</strong> en SQL Server Configuration Manager.</li>
+  <li>El puerto debe ser <strong>1433</strong>.</li>
+  <li>La autenticación debe ser <strong>modo mixto</strong>.</li>
+</ol>
+
+<h3>❌ Usuario o contraseña incorrectos al hacer login en SIKALMA</h3>
+<p><strong>Solución:</strong> Verifica <code>SPRING_SECURITY_USER_NAME</code> y <code>SPRING_SECURITY_USER_PASSWORD</code> en el archivo <code>.env</code>. Después de cambiarlos, <strong>detén y vuelve a ejecutar</strong> la aplicación.</p>
+
+<hr style="margin: 2rem 0;">
+<p style="text-align: center; color: #75685e; font-size: 10pt;">
+  <strong>SIKALMA</strong> · Centro Psicológico · Huánuco, Perú<br>
+  Guía de instalación — Septiembre 2026
+</p>
+
+</body>
+</html>

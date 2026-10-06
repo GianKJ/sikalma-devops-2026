@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Pacientes | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('pacientes')}"></div>
+<main class="admin-content">
+    <header class="admin-header admin-header--actions">
+        <div><p class="admin-eyebrow">Personas</p><h1>Gestión de pacientes</h1></div>
+        <a class="button button--primary" th:href="@{/admin/pacientes/nuevo}">Nuevo paciente</a>
+    </header>
+
+    <div class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}" role="status"></div>
+
+    <section class="admin-section" aria-labelledby="pacientes-titulo">
+        <div class="admin-section__heading">
+            <div><h2 id="pacientes-titulo">Pacientes registrados</h2><p>Información administrativa y estado del registro.</p></div>
+        </div>
+        <form class="filter-bar" method="get" th:action="@{/admin/pacientes}">
+            <label class="sr-only" for="buscar-paciente">Buscar paciente</label>
+            <input id="buscar-paciente" type="search" name="buscar" th:value="${buscar}" placeholder="Documento, nombres o apellidos">
+            <button class="button button--secondary" type="submit">Buscar</button>
+        </form>
+        <div class="table-frame">
+            <div class="table-scroll">
+                <table>
+                    <thead><tr><th>Documento</th><th>Paciente</th><th>Teléfono</th><th>Consentimiento</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>
+                    <tr th:each="paciente : ${pacientes}">
+                        <td th:text="${paciente.tipoDocumento.etiqueta + ' ' + paciente.numeroDocumento}"></td>
+                        <td><strong th:text="${paciente.apellidos + ', ' + paciente.nombres}"></strong><span class="cell-note" th:text="${paciente.correo ?: 'Sin correo'}"></span></td>
+                        <td th:text="${paciente.telefono}"></td>
+                        <td th:text="${paciente.consentimientoRegistrado ? 'Registrado' : 'Pendiente'}"></td>
+                        <td><span class="status" th:classappend="${paciente.activo} ? 'status--active' : 'status--inactive'" th:text="${paciente.activo ? 'Activo' : 'Inactivo'}"></span></td>
+                        <td class="row-actions">
+                            <a th:href="@{/admin/pacientes/{id}/editar(id=${paciente.id})}">Editar</a>
+                            <form th:action="@{/admin/pacientes/{id}/estado(id=${paciente.id})}" method="post">
+                                <button type="submit" th:text="${paciente.activo ? 'Desactivar' : 'Activar'}"></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(pacientes)}"><td class="table-empty-cell" colspan="6">No hay pacientes registrados.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title th:text="${formulario.id == null ? 'Nuevo paciente | SIKALMA' : 'Editar paciente | SIKALMA'}"></title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('pacientes')}"></div>
+<main class="admin-content">
+    <header class="admin-header admin-header--actions">
+        <div><p class="admin-eyebrow">Pacientes</p><h1 th:text="${formulario.id == null ? 'Registrar paciente' : 'Editar paciente'}"></h1></div>
+        <a class="button button--secondary" th:href="@{/admin/pacientes}">Cancelar</a>
+    </header>
+
+    <section class="admin-section form-section" aria-labelledby="datos-paciente">
+        <form class="entity-form" th:action="@{/admin/pacientes/guardar}" th:object="${formulario}" method="post" novalidate>
+            <input type="hidden" th:field="*{id}">
+            <div class="form-error-summary" th:if="${#fields.hasAnyErrors()}" role="alert">Revisa los campos señalados.</div>
+
+            <fieldset>
+                <legend id="datos-paciente">Datos personales</legend>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="tipoDocumento">Tipo de documento</label>
+                        <select id="tipoDocumento" th:field="*{tipoDocumento}">
+                            <option value="">Seleccionar</option>
+                            <option th:each="tipo : ${tiposDocumento}" th:value="${tipo}" th:text="${tipo.etiqueta}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{tipoDocumento}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="numeroDocumento">Número de documento</label>
+                        <input id="numeroDocumento" type="text" th:field="*{numeroDocumento}" maxlength="20" autocomplete="off">
+                        <span class="field-error" th:errors="*{numeroDocumento}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="nombres">Nombres</label>
+                        <input id="nombres" type="text" th:field="*{nombres}" maxlength="100" autocomplete="given-name">
+                        <span class="field-error" th:errors="*{nombres}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="apellidos">Apellidos</label>
+                        <input id="apellidos" type="text" th:field="*{apellidos}" maxlength="120" autocomplete="family-name">
+                        <span class="field-error" th:errors="*{apellidos}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="fechaNacimiento">Fecha de nacimiento</label>
+                        <input id="fechaNacimiento" type="date" th:field="*{fechaNacimiento}">
+                        <span class="field-error" th:errors="*{fechaNacimiento}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="telefono">Teléfono</label>
+                        <input id="telefono" type="tel" th:field="*{telefono}" maxlength="20" autocomplete="tel">
+                        <span class="field-error" th:errors="*{telefono}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="correo">Correo</label>
+                        <input id="correo" type="email" th:field="*{correo}" maxlength="160" autocomplete="email">
+                        <span class="field-error" th:errors="*{correo}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="direccion">Dirección</label>
+                        <input id="direccion" type="text" th:field="*{direccion}" maxlength="250" autocomplete="street-address">
+                        <span class="field-error" th:errors="*{direccion}"></span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Contacto y privacidad</legend>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="contactoEmergencia">Contacto de emergencia</label>
+                        <input id="contactoEmergencia" type="text" th:field="*{contactoEmergencia}" maxlength="180">
+                        <span class="field-error" th:errors="*{contactoEmergencia}"></span>
+                    </div>
+                    <div class="field">
+                        <label for="apoderado">Apoderado</label>
+                        <input id="apoderado" type="text" th:field="*{apoderado}" maxlength="180">
+                        <span class="field-error" th:errors="*{apoderado}"></span>
+                    </div>
+                    <div class="field field--wide">
+                        <label for="preferenciasPrivacidad">Preferencias de privacidad</label>
+                        <textarea id="preferenciasPrivacidad" th:field="*{preferenciasPrivacidad}" maxlength="500" rows="3"></textarea>
+                        <span class="field-error" th:errors="*{preferenciasPrivacidad}"></span>
+                    </div>
+                    <div class="field field--wide">
+                        <label for="observacionesAdministrativas">Observaciones administrativas</label>
+                        <textarea id="observacionesAdministrativas" th:field="*{observacionesAdministrativas}" maxlength="1000" rows="4"></textarea>
+                        <span class="field-error" th:errors="*{observacionesAdministrativas}"></span>
+                    </div>
+                    <label class="check-field field--wide">
+                        <input type="checkbox" th:field="*{consentimientoRegistrado}">
+                        <span>Consentimiento informado registrado</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <a class="button button--secondary" th:href="@{/admin/pacientes}">Cancelar</a>
+                <button class="button button--primary" type="submit">Guardar paciente</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

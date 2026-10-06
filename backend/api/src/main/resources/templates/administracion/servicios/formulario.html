@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title th:text="${formulario.id == null ? 'Nuevo servicio | SIKALMA' : 'Editar servicio | SIKALMA'}"></title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}"><link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('servicios')}"></div>
+<main class="admin-content">
+    <header class="admin-header admin-header--actions"><div><p class="admin-eyebrow">Catálogo</p><h1 th:text="${formulario.id == null ? 'Registrar servicio' : 'Editar servicio'}"></h1></div><a class="button button--secondary" th:href="@{/admin/servicios}">Cancelar</a></header>
+    <section class="admin-section form-section">
+        <form class="entity-form" th:action="@{/admin/servicios/guardar}" th:object="${formulario}" method="post" novalidate>
+            <input type="hidden" th:field="*{id}">
+            <div class="form-error-summary" th:if="${#fields.hasAnyErrors()}" role="alert">Revisa los campos señalados.</div>
+            <fieldset><legend>Datos del servicio</legend><div class="form-grid">
+                <div class="field field--wide"><label for="nombre">Nombre</label><input id="nombre" type="text" th:field="*{nombre}" maxlength="140"><span class="field-error" th:errors="*{nombre}"></span></div>
+                <div class="field field--wide"><label for="descripcion">Descripción</label><textarea id="descripcion" th:field="*{descripcion}" maxlength="1000" rows="5"></textarea><span class="field-error" th:errors="*{descripcion}"></span></div>
+                <div class="field"><label for="modalidad">Modalidad</label><select id="modalidad" th:field="*{modalidad}"><option value="">Seleccionar</option><option th:each="item : ${modalidades}" th:value="${item}" th:text="${item.etiqueta}"></option></select><span class="field-error" th:errors="*{modalidad}"></span></div>
+                <div class="field"><label for="duracionMinutos">Duración aproximada (minutos)</label><input id="duracionMinutos" type="number" th:field="*{duracionMinutos}" min="15" max="480" step="5"><span class="field-error" th:errors="*{duracionMinutos}"></span></div>
+                <div class="field field--wide"><label for="publicoObjetivo">Público objetivo</label><input id="publicoObjetivo" type="text" th:field="*{publicoObjetivo}" maxlength="250"><span class="field-error" th:errors="*{publicoObjetivo}"></span></div>
+            </div></fieldset>
+            <div class="form-actions"><a class="button button--secondary" th:href="@{/admin/servicios}">Cancelar</a><button class="button button--primary" type="submit">Guardar servicio</button></div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

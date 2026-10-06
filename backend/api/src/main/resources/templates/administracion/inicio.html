@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Panel administrativo | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('inicio')}"></div>
+
+<main class="admin-content">
+    <header class="admin-header">
+        <div>
+            <p class="admin-eyebrow" id="current-date-time">Panel administrativo</p>
+            <h1>Gestión de SIKALMA</h1>
+        </div>
+        <span class="role-label">Administrador</span>
+    </header>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateEl = document.getElementById('current-date-time');
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateEl.textContent = 'Panel administrativo • ' + now.toLocaleDateString('es-ES', options);
+        });
+    </script>
+
+    <section class="admin-section" aria-labelledby="accesos-titulo">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="accesos-titulo">Accesos principales</h2>
+                <p>Selecciona el módulo que deseas consultar.</p>
+            </div>
+        </div>
+
+        <div class="admin-module-grid">
+            <a class="admin-module" th:href="@{/admin/citas}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span class="admin-module__label">Agenda</span>
+                <strong>Citas</strong>
+                <p>Consulta la bandeja de citas del centro.</p>
+                <span class="admin-module__action">Abrir módulo</span>
+            </a>
+            <a class="admin-module" th:href="@{/admin/pacientes}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span class="admin-module__label">Personas</span>
+                <strong>Pacientes</strong>
+                <p>Registra, consulta y actualiza los datos administrativos.</p>
+                <span class="admin-module__action">Abrir módulo</span>
+            </a>
+            <a class="admin-module" th:href="@{/admin/psicologos}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg>
+                <span class="admin-module__label">Equipo</span>
+                <strong>Psicólogos</strong>
+                <p>Administra profesionales, modalidades y asignaciones.</p>
+                <span class="admin-module__action">Abrir módulo</span>
+            </a>
+            <a class="admin-module" th:href="@{/admin/especialidades}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span class="admin-module__label">Catálogo</span>
+                <strong>Especialidades</strong>
+                <p>Configura las áreas profesionales del centro.</p>
+                <span class="admin-module__action">Abrir módulo</span>
+            </a>
+            <a class="admin-module" th:href="@{/admin/servicios}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span class="admin-module__label">Catálogo</span>
+                <strong>Servicios</strong>
+                <p>Gestiona modalidades, duración y público objetivo.</p>
+                <span class="admin-module__action">Abrir módulo</span>
+            </a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

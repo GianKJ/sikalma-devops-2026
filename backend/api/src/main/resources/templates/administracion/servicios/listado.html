@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Servicios | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('servicios')}"></div>
+<main class="admin-content">
+    <header class="admin-header admin-header--actions">
+        <div><p class="admin-eyebrow">Catálogo</p><h1>Gestión de servicios</h1></div>
+        <a class="button button--primary" th:href="@{/admin/servicios/nuevo}">Nuevo servicio</a>
+    </header>
+
+    <div class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}" role="status"></div>
+
+    <section class="admin-section" aria-labelledby="servicios-titulo">
+        <div class="admin-section__heading"><div><h2 id="servicios-titulo">Servicios registrados</h2><p>Oferta psicológica administrable del centro.</p></div></div>
+        <form class="filter-bar" method="get" th:action="@{/admin/servicios}">
+            <label class="sr-only" for="buscar-servicio">Buscar servicio</label>
+            <input id="buscar-servicio" type="search" name="buscar" th:value="${buscar}" placeholder="Nombre del servicio">
+            <button class="button button--secondary" type="submit">Buscar</button>
+        </form>
+        <div class="table-frame"><div class="table-scroll"><table>
+            <thead><tr><th>Servicio</th><th>Modalidad</th><th>Duración</th><th>Público objetivo</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+            <tr th:each="item : ${servicios}">
+                <td><strong th:text="${item.nombre}"></strong><span class="cell-note" th:text="${item.descripcion}"></span></td>
+                <td th:text="${item.modalidad.etiqueta}"></td>
+                <td th:text="${item.duracionMinutos + ' min'}"></td>
+                <td th:text="${item.publicoObjetivo}"></td>
+                <td><span class="status" th:classappend="${item.activo} ? 'status--active' : 'status--inactive'" th:text="${item.activo ? 'Activo' : 'Inactivo'}"></span></td>
+                <td class="row-actions"><a th:href="@{/admin/servicios/{id}/editar(id=${item.id})}">Editar</a><form th:action="@{/admin/servicios/{id}/estado(id=${item.id})}" method="post"><button type="submit" th:text="${item.activo ? 'Desactivar' : 'Activar'}"></button></form></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(servicios)}"><td class="table-empty-cell" colspan="6">No hay servicios registrados.</td></tr>
+            </tbody>
+        </table></div></div>
+    </section>
+</main>
+</body>
+</html>

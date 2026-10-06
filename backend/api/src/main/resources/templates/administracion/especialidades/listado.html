@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Especialidades | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('especialidades')}"></div>
+<main class="admin-content">
+    <header class="admin-header admin-header--actions">
+        <div><p class="admin-eyebrow">Catálogo</p><h1>Gestión de especialidades</h1></div>
+        <a class="button button--primary" th:href="@{/admin/especialidades/nuevo}">Nueva especialidad</a>
+    </header>
+
+    <div class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}" role="status"></div>
+
+    <section class="admin-section" aria-labelledby="especialidades-titulo">
+        <div class="admin-section__heading"><div><h2 id="especialidades-titulo">Especialidades registradas</h2><p>Áreas profesionales disponibles en el centro.</p></div></div>
+        <form class="filter-bar" method="get" th:action="@{/admin/especialidades}">
+            <label class="sr-only" for="buscar-especialidad">Buscar especialidad</label>
+            <input id="buscar-especialidad" type="search" name="buscar" th:value="${buscar}" placeholder="Nombre de especialidad">
+            <button class="button button--secondary" type="submit">Buscar</button>
+        </form>
+        <div class="table-frame"><div class="table-scroll"><table>
+            <thead><tr><th>Especialidad</th><th>Descripción</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+            <tr th:each="especialidad : ${especialidades}">
+                <td><strong th:text="${especialidad.nombre}"></strong></td>
+                <td th:text="${especialidad.descripcion ?: 'Sin descripción'}"></td>
+                <td><span class="status" th:classappend="${especialidad.activo} ? 'status--active' : 'status--inactive'" th:text="${especialidad.activo ? 'Activa' : 'Inactiva'}"></span></td>
+                <td class="row-actions"><a th:href="@{/admin/especialidades/{id}/editar(id=${especialidad.id})}">Editar</a><form th:action="@{/admin/especialidades/{id}/estado(id=${especialidad.id})}" method="post"><button type="submit" th:text="${especialidad.activo ? 'Desactivar' : 'Activar'}"></button></form></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(especialidades)}"><td class="table-empty-cell" colspan="4">No hay especialidades registradas.</td></tr>
+            </tbody>
+        </table></div></div>
+    </section>
+</main>
+</body>
+</html>
