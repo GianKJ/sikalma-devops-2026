@@ -1,8 +1,18 @@
-// entity/Cita.java
 package pe.com.sikalma.entity;
 
 import java.time.LocalDateTime;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "citas")
@@ -37,5 +47,26 @@ public class Cita extends EntidadAuditable {
     @Column(length = 500)
     private String observaciones;
 
-    // getters y setters de todos los campos (igual que en Paciente)
+    public Long getId() { return id; }
+
+    public Paciente getPaciente() { return paciente; }
+    public void setPaciente(Paciente paciente) { this.paciente = paciente; }
+
+    public Psicologo getPsicologo() { return psicologo; }
+    public void setPsicologo(Psicologo psicologo) { this.psicologo = psicologo; }
+
+    public Servicio getServicio() { return servicio; }
+    public void setServicio(Servicio servicio) { this.servicio = servicio; }
+
+    public LocalDateTime getFechaHoraInicio() { return fechaHoraInicio; }
+    public void setFechaHoraInicio(LocalDateTime fechaHoraInicio) { this.fechaHoraInicio = fechaHoraInicio; }
+
+    public LocalDateTime getFechaHoraFin() { return fechaHoraFin; }
+    public void setFechaHoraFin(LocalDateTime fechaHoraFin) { this.fechaHoraFin = fechaHoraFin; }
+
+    public EstadoCita getEstado() { return estado; }
+    public void setEstado(EstadoCita estado) { this.estado = estado; }
+
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 }
