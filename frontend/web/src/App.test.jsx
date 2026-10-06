@@ -7,7 +7,7 @@ describe('SIKALMA Frontend - Suite de Pruebas Unitarias', () => {
   it('renderiza el título principal de SIKALMA y el lema', () => {
     render(<App />);
     expect(screen.getByText(/Tu Refugio de Calma y Equilibrio Emocional/i)).toBeInTheDocument();
-    expect(screen.getByText(/Centro Psicológico • Huánuco/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Centro Psicológico • Huánuco/i)[0]).toBeInTheDocument();
   });
 
   it('permite navegar entre las pestañas de Servicios y Psicólogos', () => {
@@ -24,7 +24,7 @@ describe('SIKALMA Frontend - Suite de Pruebas Unitarias', () => {
 
   it('permite navegar al formulario de Agendar Cita', () => {
     render(<App />);
-    const btnAgendar = screen.getByRole('button', { name: /Agendar Cita/i });
+    const btnAgendar = screen.getByRole('button', { name: /^🗓️ Agendar Cita$/i });
     fireEvent.click(btnAgendar);
     expect(screen.getByText(/Reserva de Cita Psicológica/i)).toBeInTheDocument();
   });
