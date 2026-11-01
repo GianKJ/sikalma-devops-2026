@@ -270,28 +270,36 @@
                     </a>
                 </div>
             </div>
-            <dl class="contact-list">
+            <div class="contact-list">
                 <div>
-                    <dt>Dirección</dt>
-                    <dd th:text="${sikalma.direccion}">Calle Los Tulipanes 112, Amarilis, Huánuco</dd>
+                    <dl style="margin: 0;">
+                        <dt>Dirección</dt>
+                        <dd th:text="${sikalma.direccion}">Calle Los Tulipanes 112, Amarilis, Huánuco</dd>
+                    </dl>
                 </div>
                 <div>
-                    <dt>Horario</dt>
-                    <dd th:text="${sikalma.horario}">Lunes a sábado</dd>
+                    <dl style="margin: 0;">
+                        <dt>Horario</dt>
+                        <dd th:text="${sikalma.horario}">Lunes a sábado</dd>
+                    </dl>
                 </div>
                 <div>
-                    <dt>Teléfono</dt>
-                    <dd><a th:href="${'tel:+51' + #strings.replace(sikalma.telefono, ' ', '')}"
-                           th:text="${sikalma.telefono}">993 668 057</a></dd>
+                    <dl style="margin: 0;">
+                        <dt>Teléfono</dt>
+                        <dd><a th:href="${'tel:+51' + #strings.replace(sikalma.telefono, ' ', '')}"
+                               th:text="${sikalma.telefono}">993 668 057</a></dd>
+                    </dl>
                 </div>
                 <div>
-                    <dt>Correo</dt>
-                    <dd><a th:href="|mailto:${sikalma.correo}|" th:text="${sikalma.correo}">Correo</a></dd>
+                    <dl style="margin: 0;">
+                        <dt>Correo</dt>
+                        <dd><a th:href="|mailto:${sikalma.correo}|" th:text="${sikalma.correo}">Correo</a></dd>
+                    </dl>
                 </div>
                 <div class="map-placeholder">
                     <p>Ver en Google Maps</p>
                 </div>
-            </dl>
+            </div>
         </div>
     </section>
 </main>

@@ -14,27 +14,27 @@ public class EspecialidadFormulario {
     @Size(max = 500, message = "La descripción admite hasta 500 caracteres.")
     private String descripcion;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public String getDescripcion() {
+        return this.descripcion;
     }
 
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public Long getId() {
+        return this.id;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public void setDescripcion(String valorDescripcion) {
+        this.descripcion = valorDescripcion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombre(String valorNombre) {
+        this.nombre = valorNombre;
+    }
+
+    public void setId(Long valorId) {
+        this.id = valorId;
     }
 }

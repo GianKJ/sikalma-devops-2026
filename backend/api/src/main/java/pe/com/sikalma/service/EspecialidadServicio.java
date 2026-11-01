@@ -55,7 +55,7 @@ public class EspecialidadServicio {
 
         Especialidad entidad = formulario.getId() == null ? new Especialidad() : obtener(formulario.getId());
         entidad.setNombre(nombre);
-        entidad.setDescripcion(opcional(formulario.getDescripcion()));
+        entidad.setDescripcion(TextoNormalizadorUtil.opcional(formulario.getDescripcion()));
         repositorio.save(entidad);
     }
 
@@ -68,9 +68,5 @@ public class EspecialidadServicio {
     private Especialidad obtener(Long id) {
         return repositorio.findById(id)
                 .orElseThrow(() -> new RegistroNoEncontradoException("La especialidad solicitada no existe."));
-    }
-
-    private String opcional(String valor) {
-        return valor == null || valor.isBlank() ? null : valor.trim();
     }
 }

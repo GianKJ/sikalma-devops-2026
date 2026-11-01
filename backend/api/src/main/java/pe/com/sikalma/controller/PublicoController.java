@@ -9,6 +9,8 @@ import pe.com.sikalma.service.InformacionPublicaServicio;
 @Controller
 public class PublicoController {
 
+    private static final String ATTR_SIKALMA = "sikalma";
+
     private final InformacionPublicaServicio informacionPublicaServicio;
 
     public PublicoController(InformacionPublicaServicio informacionPublicaServicio) {
@@ -17,19 +19,19 @@ public class PublicoController {
 
     @GetMapping({"/", "/inicio"})
     public String inicio(Model model) {
-        model.addAttribute("sikalma", informacionPublicaServicio.obtenerInformacionPublica());
+        model.addAttribute(ATTR_SIKALMA, informacionPublicaServicio.obtenerInformacionPublica());
         return "publico/inicio";
     }
 
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("sikalma", informacionPublicaServicio.obtenerInformacionPublica());
+        model.addAttribute(ATTR_SIKALMA, informacionPublicaServicio.obtenerInformacionPublica());
         return "autenticacion/login";
     }
 
     @GetMapping("/acceso-denegado")
     public String accesoDenegado(Model model) {
-        model.addAttribute("sikalma", informacionPublicaServicio.obtenerInformacionPublica());
+        model.addAttribute(ATTR_SIKALMA, informacionPublicaServicio.obtenerInformacionPublica());
         return "error/403";
     }
 }

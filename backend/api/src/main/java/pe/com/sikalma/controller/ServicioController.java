@@ -21,6 +21,9 @@ import pe.com.sikalma.service.ServicioPsicologicoServicio;
 @RequestMapping("/admin/servicios")
 public class ServicioController {
 
+    private static final String VISTA_FORMULARIO = "administracion/servicios/formulario";
+    private static final String REDIRECCION_SERVICIOS = "redirect:/admin/servicios";
+
     private final ServicioPsicologicoServicio servicio;
 
     public ServicioController(ServicioPsicologicoServicio servicio) {
@@ -37,13 +40,13 @@ public class ServicioController {
     @GetMapping("/nuevo")
     public String nuevo(Model modelo) {
         prepararFormulario(modelo, new ServicioFormulario());
-        return "administracion/servicios/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @GetMapping("/{id}/editar")
     public String editar(@PathVariable Long id, Model modelo) {
         prepararFormulario(modelo, servicio.obtenerFormulario(id));
-        return "administracion/servicios/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/guardar")
@@ -52,26 +55,24 @@ public class ServicioController {
             BindingResult errores,
             Model modelo,
             RedirectAttributes redireccion) {
-        if (errores.hasErrors()) {
-            prepararFormulario(modelo, formulario);
-            return "administracion/servicios/formulario";
+        if (!errores.hasErrors()) {
+            try {
+                servicio.guardar(formulario);
+                redireccion.addFlashAttribute("mensaje", "Servicio guardado correctamente.");
+                return REDIRECCION_SERVICIOS;
+            } catch (RegistroDuplicadoException excepcion) {
+                errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
+            }
         }
-        try {
-            servicio.guardar(formulario);
-        } catch (RegistroDuplicadoException excepcion) {
-            errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
-            prepararFormulario(modelo, formulario);
-            return "administracion/servicios/formulario";
-        }
-        redireccion.addFlashAttribute("mensaje", "Servicio guardado correctamente.");
-        return "redirect:/admin/servicios";
+        prepararFormulario(modelo, formulario);
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/{id}/estado")
     public String alternarEstado(@PathVariable Long id, RedirectAttributes redireccion) {
         servicio.alternarEstado(id);
         redireccion.addFlashAttribute("mensaje", "Estado del servicio actualizado.");
-        return "redirect:/admin/servicios";
+        return REDIRECCION_SERVICIOS;
     }
 
     private void prepararFormulario(Model modelo, ServicioFormulario formulario) {

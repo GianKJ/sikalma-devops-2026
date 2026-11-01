@@ -16,7 +16,7 @@
         <a class="button button--primary" th:href="@{/admin/servicios/nuevo}">Nuevo servicio</a>
     </header>
 
-    <div class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}" role="status"></div>
+    <output class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}"></output>
 
     <section class="admin-section" aria-labelledby="servicios-titulo">
         <div class="admin-section__heading"><div><h2 id="servicios-titulo">Servicios registrados</h2><p>Oferta psicológica administrable del centro.</p></div></div>

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pe.com.sikalma.dto.PsicologoFormulario;
+import pe.com.sikalma.entity.Especialidad;
 import pe.com.sikalma.entity.Psicologo;
+import pe.com.sikalma.entity.Servicio;
 import pe.com.sikalma.exception.RegistroDuplicadoException;
 import pe.com.sikalma.exception.RegistroNoEncontradoException;
 import pe.com.sikalma.repository.EspecialidadRepositorio;
@@ -57,9 +59,9 @@ public class PsicologoServicio {
         formulario.setCorreo(entidad.getCorreo());
         formulario.setDescripcionProfesional(entidad.getDescripcionProfesional());
         formulario.setModalidad(entidad.getModalidad());
-        formulario.setEspecialidadIds(entidad.getEspecialidades().stream().map(e -> e.getId()).collect(
+        formulario.setEspecialidadIds(entidad.getEspecialidades().stream().map(Especialidad::getId).collect(
                 java.util.stream.Collectors.toCollection(LinkedHashSet::new)));
-        formulario.setServicioIds(entidad.getServicios().stream().map(s -> s.getId()).collect(
+        formulario.setServicioIds(entidad.getServicios().stream().map(Servicio::getId).collect(
                 java.util.stream.Collectors.toCollection(LinkedHashSet::new)));
         return formulario;
     }
@@ -70,13 +72,13 @@ public class PsicologoServicio {
         validarDuplicado(repositorio.findByNumeroDocumentoIgnoreCase(documento).orElse(null), formulario.getId(),
                 "numeroDocumento", "Ya existe un psicólogo con este documento.");
 
-        String correo = opcionalMinuscula(formulario.getCorreo());
+        String correo = TextoNormalizadorUtil.opcionalMinuscula(formulario.getCorreo());
         if (correo != null) {
             validarDuplicado(repositorio.findByCorreoIgnoreCase(correo).orElse(null), formulario.getId(),
                     "correo", "Ya existe un psicólogo con este correo.");
         }
 
-        String colegiatura = opcionalMayuscula(formulario.getColegiatura());
+        String colegiatura = TextoNormalizadorUtil.opcionalMayuscula(formulario.getColegiatura());
         if (colegiatura != null) {
             validarDuplicado(repositorio.findByColegiaturaIgnoreCase(colegiatura).orElse(null), formulario.getId(),
                     "colegiatura", "Ya existe un psicólogo con esta colegiatura.");
@@ -90,7 +92,7 @@ public class PsicologoServicio {
         entidad.setColegiatura(colegiatura);
         entidad.setTelefono(formulario.getTelefono().trim());
         entidad.setCorreo(correo);
-        entidad.setDescripcionProfesional(opcional(formulario.getDescripcionProfesional()));
+        entidad.setDescripcionProfesional(TextoNormalizadorUtil.opcional(formulario.getDescripcionProfesional()));
         entidad.setModalidad(formulario.getModalidad());
         entidad.setEspecialidades(new LinkedHashSet<>(especialidadRepositorio.findAllById(formulario.getEspecialidadIds())));
         entidad.setServicios(new LinkedHashSet<>(servicioRepositorio.findAllById(formulario.getServicioIds())));
@@ -112,19 +114,5 @@ public class PsicologoServicio {
         if (existente != null && !Objects.equals(existente.getId(), idActual)) {
             throw new RegistroDuplicadoException(campo, mensaje);
         }
-    }
-
-    private String opcional(String valor) {
-        return valor == null || valor.isBlank() ? null : valor.trim();
-    }
-
-    private String opcionalMinuscula(String valor) {
-        String normalizado = opcional(valor);
-        return normalizado == null ? null : normalizado.toLowerCase(Locale.ROOT);
-    }
-
-    private String opcionalMayuscula(String valor) {
-        String normalizado = opcional(valor);
-        return normalizado == null ? null : normalizado.toUpperCase(Locale.ROOT);
     }
 }

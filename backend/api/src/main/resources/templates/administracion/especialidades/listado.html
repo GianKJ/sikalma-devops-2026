@@ -16,7 +16,7 @@
         <a class="button button--primary" th:href="@{/admin/especialidades/nuevo}">Nueva especialidad</a>
     </header>
 
-    <div class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}" role="status"></div>
+    <output class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}"></output>
 
     <section class="admin-section" aria-labelledby="especialidades-titulo">
         <div class="admin-section__heading"><div><h2 id="especialidades-titulo">Especialidades registradas</h2><p>Áreas profesionales disponibles en el centro.</p></div></div>

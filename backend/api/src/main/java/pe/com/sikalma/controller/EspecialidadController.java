@@ -20,6 +20,9 @@ import pe.com.sikalma.service.EspecialidadServicio;
 @RequestMapping("/admin/especialidades")
 public class EspecialidadController {
 
+    private static final String VISTA_FORMULARIO = "administracion/especialidades/formulario";
+    private static final String REDIRECCION_ESPECIALIDADES = "redirect:/admin/especialidades";
+
     private final EspecialidadServicio servicio;
 
     public EspecialidadController(EspecialidadServicio servicio) {
@@ -36,13 +39,13 @@ public class EspecialidadController {
     @GetMapping("/nuevo")
     public String nuevo(Model modelo) {
         modelo.addAttribute("formulario", new EspecialidadFormulario());
-        return "administracion/especialidades/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @GetMapping("/{id}/editar")
     public String editar(@PathVariable Long id, Model modelo) {
         modelo.addAttribute("formulario", servicio.obtenerFormulario(id));
-        return "administracion/especialidades/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/guardar")
@@ -50,23 +53,22 @@ public class EspecialidadController {
             @Valid @ModelAttribute("formulario") EspecialidadFormulario formulario,
             BindingResult errores,
             RedirectAttributes redireccion) {
-        if (errores.hasErrors()) {
-            return "administracion/especialidades/formulario";
+        if (!errores.hasErrors()) {
+            try {
+                servicio.guardar(formulario);
+                redireccion.addFlashAttribute("mensaje", "Especialidad guardada correctamente.");
+                return REDIRECCION_ESPECIALIDADES;
+            } catch (RegistroDuplicadoException excepcion) {
+                errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
+            }
         }
-        try {
-            servicio.guardar(formulario);
-        } catch (RegistroDuplicadoException excepcion) {
-            errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
-            return "administracion/especialidades/formulario";
-        }
-        redireccion.addFlashAttribute("mensaje", "Especialidad guardada correctamente.");
-        return "redirect:/admin/especialidades";
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/{id}/estado")
     public String alternarEstado(@PathVariable Long id, RedirectAttributes redireccion) {
         servicio.alternarEstado(id);
         redireccion.addFlashAttribute("mensaje", "Estado de la especialidad actualizado.");
-        return "redirect:/admin/especialidades";
+        return REDIRECCION_ESPECIALIDADES;
     }
 }

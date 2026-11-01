@@ -58,115 +58,115 @@ public class PacienteFormulario {
     @Size(max = 500, message = "Las preferencias admiten hasta 500 caracteres.")
     private String preferenciasPrivacidad;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public TipoDocumento getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
-
-    public void setNumeroDocumento(String numeroDocumento) {
-        this.numeroDocumento = numeroDocumento;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getContactoEmergencia() {
-        return contactoEmergencia;
-    }
-
-    public void setContactoEmergencia(String contactoEmergencia) {
-        this.contactoEmergencia = contactoEmergencia;
-    }
-
-    public String getApoderado() {
-        return apoderado;
-    }
-
-    public void setApoderado(String apoderado) {
-        this.apoderado = apoderado;
-    }
-
-    public String getObservacionesAdministrativas() {
-        return observacionesAdministrativas;
-    }
-
-    public void setObservacionesAdministrativas(String observacionesAdministrativas) {
-        this.observacionesAdministrativas = observacionesAdministrativas;
+    public String getPreferenciasPrivacidad() {
+        return this.preferenciasPrivacidad;
     }
 
     public boolean isConsentimientoRegistrado() {
-        return consentimientoRegistrado;
+        return this.consentimientoRegistrado;
     }
 
-    public void setConsentimientoRegistrado(boolean consentimientoRegistrado) {
-        this.consentimientoRegistrado = consentimientoRegistrado;
+    public String getObservacionesAdministrativas() {
+        return this.observacionesAdministrativas;
     }
 
-    public String getPreferenciasPrivacidad() {
-        return preferenciasPrivacidad;
+    public String getApoderado() {
+        return this.apoderado;
     }
 
-    public void setPreferenciasPrivacidad(String preferenciasPrivacidad) {
-        this.preferenciasPrivacidad = preferenciasPrivacidad;
+    public String getContactoEmergencia() {
+        return this.contactoEmergencia;
+    }
+
+    public String getDireccion() {
+        return this.direccion;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return this.fechaNacimiento;
+    }
+
+    public String getCorreo() {
+        return this.correo;
+    }
+
+    public String getApellidos() {
+        return this.apellidos;
+    }
+
+    public String getTelefono() {
+        return this.telefono;
+    }
+
+    public String getNombres() {
+        return this.nombres;
+    }
+
+    public TipoDocumento getTipoDocumento() {
+        return this.tipoDocumento;
+    }
+
+    public String getNumeroDocumento() {
+        return this.numeroDocumento;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setPreferenciasPrivacidad(String valorPreferencias) {
+        this.preferenciasPrivacidad = valorPreferencias;
+    }
+
+    public void setConsentimientoRegistrado(boolean valorConsentimiento) {
+        this.consentimientoRegistrado = valorConsentimiento;
+    }
+
+    public void setObservacionesAdministrativas(String valorObservaciones) {
+        this.observacionesAdministrativas = valorObservaciones;
+    }
+
+    public void setApoderado(String valorApoderado) {
+        this.apoderado = valorApoderado;
+    }
+
+    public void setContactoEmergencia(String valorContacto) {
+        this.contactoEmergencia = valorContacto;
+    }
+
+    public void setDireccion(String valorDireccion) {
+        this.direccion = valorDireccion;
+    }
+
+    public void setFechaNacimiento(LocalDate valorFecha) {
+        this.fechaNacimiento = valorFecha;
+    }
+
+    public void setCorreo(String valorCorreo) {
+        this.correo = valorCorreo;
+    }
+
+    public void setApellidos(String valorApellidos) {
+        this.apellidos = valorApellidos;
+    }
+
+    public void setTelefono(String valorTelefono) {
+        this.telefono = valorTelefono;
+    }
+
+    public void setNombres(String valorNombres) {
+        this.nombres = valorNombres;
+    }
+
+    public void setTipoDocumento(TipoDocumento valorTipo) {
+        this.tipoDocumento = valorTipo;
+    }
+
+    public void setNumeroDocumento(String valorNumero) {
+        this.numeroDocumento = valorNumero;
+    }
+
+    public void setId(Long valorId) {
+        this.id = valorId;
     }
 }
