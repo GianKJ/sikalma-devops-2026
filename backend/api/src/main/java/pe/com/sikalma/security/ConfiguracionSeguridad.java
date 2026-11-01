@@ -9,13 +9,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
 public class ConfiguracionSeguridad {
+
+    private static final String ROL_ADMINISTRADOR = "ADMINISTRADOR";
 
     @Bean
     SecurityFilterChain filtroSeguridad(HttpSecurity http) throws Exception {
@@ -26,11 +27,11 @@ public class ConfiguracionSeguridad {
                                 "/css/**", "/js/**", "/img/**", "/favicon.ico",
                                 "/error", "/error/**")
                         .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/admin/**").hasRole(ROL_ADMINISTRADOR)
                         .requestMatchers("/recepcion/**")
-                        .hasAnyRole("ADMINISTRADOR", "RECEPCIONISTA")
+                        .hasAnyRole(ROL_ADMINISTRADOR, "RECEPCIONISTA")
                         .requestMatchers("/profesional/**")
-                        .hasAnyRole("ADMINISTRADOR", "PSICOLOGO", "FISIOTERAPEUTA")
+                        .hasAnyRole(ROL_ADMINISTRADOR, "PSICOLOGO", "FISIOTERAPEUTA")
                         .anyRequest().authenticated())
                 .formLogin(formulario -> formulario
                         .loginPage("/login")
@@ -59,12 +60,24 @@ public class ConfiguracionSeguridad {
 
     @Bean
     PasswordEncoder codificadorContrasenas() {
+        PasswordEncoder textoPlanoDesarrollo = new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return rawPassword == null ? "" : rawPassword.toString();
+            }
+
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                return rawPassword != null && rawPassword.toString().equals(encodedPassword);
+            }
+        };
+
         Map<String, PasswordEncoder> codificadores = new HashMap<>();
         codificadores.put("bcrypt", new BCryptPasswordEncoder(12));
-        codificadores.put("noop", NoOpPasswordEncoder.getInstance());
+        codificadores.put("noop", textoPlanoDesarrollo);
 
         DelegatingPasswordEncoder delegador = new DelegatingPasswordEncoder("bcrypt", codificadores);
-        delegador.setDefaultPasswordEncoderForMatches(NoOpPasswordEncoder.getInstance());
+        delegador.setDefaultPasswordEncoderForMatches(textoPlanoDesarrollo);
         return delegador;
     }
 }

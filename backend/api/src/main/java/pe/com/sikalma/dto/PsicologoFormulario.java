@@ -15,23 +15,23 @@ public class PsicologoFormulario {
 
     private Long id;
 
-    @NotNull(message = "Selecciona un tipo de documento.")
-    private TipoDocumento tipoDocumento;
-
-    @NotBlank(message = "Ingresa el número de documento.")
-    @Pattern(regexp = "^[A-Za-z0-9-]{6,20}$", message = "Ingresa un documento válido.")
-    private String numeroDocumento;
-
-    @NotBlank(message = "Ingresa los nombres.")
+    @NotBlank(message = "Ingresa los nombres del psicólogo.")
     @Size(max = 100, message = "Los nombres admiten hasta 100 caracteres.")
     private String nombres;
 
-    @NotBlank(message = "Ingresa los apellidos.")
+    @NotBlank(message = "Ingresa los apellidos del psicólogo.")
     @Size(max = 120, message = "Los apellidos admiten hasta 120 caracteres.")
     private String apellidos;
 
     @Size(max = 30, message = "La colegiatura admite hasta 30 caracteres.")
     private String colegiatura;
+
+    @NotNull(message = "Selecciona un tipo de documento.")
+    private TipoDocumento tipoDocumento;
+
+    @NotBlank(message = "Ingresa el número de documento de identidad.")
+    @Pattern(regexp = "^[A-Za-z0-9-]{6,20}$", message = "Ingresa un documento válido.")
+    private String numeroDocumento;
 
     @NotBlank(message = "Ingresa el teléfono.")
     @Pattern(regexp = "^[0-9+() -]{7,20}$", message = "Ingresa un teléfono válido.")
@@ -51,99 +51,99 @@ public class PsicologoFormulario {
 
     private Set<Long> servicioIds = new LinkedHashSet<>();
 
-    public Long getId() {
-        return id;
+    public Set<Long> getServicioIds() {
+        return this.servicioIds;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public TipoDocumento getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
-
-    public void setNumeroDocumento(String numeroDocumento) {
-        this.numeroDocumento = numeroDocumento;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getColegiatura() {
-        return colegiatura;
-    }
-
-    public void setColegiatura(String colegiatura) {
-        this.colegiatura = colegiatura;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getDescripcionProfesional() {
-        return descripcionProfesional;
-    }
-
-    public void setDescripcionProfesional(String descripcionProfesional) {
-        this.descripcionProfesional = descripcionProfesional;
-    }
-
-    public ModalidadAtencion getModalidad() {
-        return modalidad;
-    }
-
-    public void setModalidad(ModalidadAtencion modalidad) {
-        this.modalidad = modalidad;
+    public void setServicioIds(Set<Long> idsServicios) {
+        this.servicioIds = idsServicios == null ? new LinkedHashSet<>() : idsServicios;
     }
 
     public Set<Long> getEspecialidadIds() {
-        return especialidadIds;
+        return this.especialidadIds;
     }
 
-    public void setEspecialidadIds(Set<Long> especialidadIds) {
-        this.especialidadIds = especialidadIds == null ? new LinkedHashSet<>() : especialidadIds;
+    public void setEspecialidadIds(Set<Long> idsEspecialidades) {
+        this.especialidadIds = idsEspecialidades == null ? new LinkedHashSet<>() : idsEspecialidades;
     }
 
-    public Set<Long> getServicioIds() {
-        return servicioIds;
+    public ModalidadAtencion getModalidad() {
+        return this.modalidad;
     }
 
-    public void setServicioIds(Set<Long> servicioIds) {
-        this.servicioIds = servicioIds == null ? new LinkedHashSet<>() : servicioIds;
+    public void setModalidad(ModalidadAtencion valorModalidad) {
+        this.modalidad = valorModalidad;
+    }
+
+    public String getDescripcionProfesional() {
+        return this.descripcionProfesional;
+    }
+
+    public void setDescripcionProfesional(String valorDescripcion) {
+        this.descripcionProfesional = valorDescripcion;
+    }
+
+    public String getColegiatura() {
+        return this.colegiatura;
+    }
+
+    public void setColegiatura(String valorColegiatura) {
+        this.colegiatura = valorColegiatura;
+    }
+
+    public String getCorreo() {
+        return this.correo;
+    }
+
+    public void setCorreo(String valorCorreo) {
+        this.correo = valorCorreo;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long valorId) {
+        this.id = valorId;
+    }
+
+    public String getTelefono() {
+        return this.telefono;
+    }
+
+    public void setTelefono(String valorTelefono) {
+        this.telefono = valorTelefono;
+    }
+
+    public String getApellidos() {
+        return this.apellidos;
+    }
+
+    public void setApellidos(String valorApellidos) {
+        this.apellidos = valorApellidos;
+    }
+
+    public TipoDocumento getTipoDocumento() {
+        return this.tipoDocumento;
+    }
+
+    public void setTipoDocumento(TipoDocumento valorTipoDoc) {
+        this.tipoDocumento = valorTipoDoc;
+    }
+
+    public String getNombres() {
+        return this.nombres;
+    }
+
+    public void setNombres(String valorNombres) {
+        this.nombres = valorNombres;
+    }
+
+    public String getNumeroDocumento() {
+        return this.numeroDocumento;
+    }
+
+    public void setNumeroDocumento(String valorNumeroDoc) {
+        this.numeroDocumento = valorNumeroDoc;
     }
 }

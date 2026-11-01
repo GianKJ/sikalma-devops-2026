@@ -24,13 +24,6 @@ public class Psicologo extends EntidadAuditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_documento", nullable = false, length = 20)
-    private TipoDocumento tipoDocumento;
-
-    @Column(name = "numero_documento", nullable = false, unique = true, length = 20)
-    private String numeroDocumento;
-
     @Column(nullable = false, length = 100)
     private String nombres;
 
@@ -39,6 +32,13 @@ public class Psicologo extends EntidadAuditable {
 
     @Column(length = 30)
     private String colegiatura;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_documento", nullable = false, length = 20)
+    private TipoDocumento tipoDocumento;
+
+    @Column(name = "numero_documento", nullable = false, unique = true, length = 20)
+    private String numeroDocumento;
 
     @Column(nullable = false, length = 20)
     private String telefono;
@@ -70,103 +70,103 @@ public class Psicologo extends EntidadAuditable {
             inverseJoinColumns = @JoinColumn(name = "servicio_id"))
     private Set<Servicio> servicios = new LinkedHashSet<>();
 
-    public Long getId() {
-        return id;
+    public Set<Servicio> getServicios() {
+        return servicios;
     }
 
-    public TipoDocumento getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
-
-    public void setNumeroDocumento(String numeroDocumento) {
-        this.numeroDocumento = numeroDocumento;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getColegiatura() {
-        return colegiatura;
-    }
-
-    public void setColegiatura(String colegiatura) {
-        this.colegiatura = colegiatura;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getDescripcionProfesional() {
-        return descripcionProfesional;
-    }
-
-    public void setDescripcionProfesional(String descripcionProfesional) {
-        this.descripcionProfesional = descripcionProfesional;
-    }
-
-    public ModalidadAtencion getModalidad() {
-        return modalidad;
-    }
-
-    public void setModalidad(ModalidadAtencion modalidad) {
-        this.modalidad = modalidad;
-    }
-
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setServicios(Set<Servicio> listaServicios) {
+        this.servicios = listaServicios;
     }
 
     public Set<Especialidad> getEspecialidades() {
         return especialidades;
     }
 
-    public void setEspecialidades(Set<Especialidad> especialidades) {
-        this.especialidades = especialidades;
+    public void setEspecialidades(Set<Especialidad> listaEspecialidades) {
+        this.especialidades = listaEspecialidades;
     }
 
-    public Set<Servicio> getServicios() {
-        return servicios;
+    public boolean isActivo() {
+        return activo;
     }
 
-    public void setServicios(Set<Servicio> servicios) {
-        this.servicios = servicios;
+    public void setActivo(boolean estadoActivo) {
+        this.activo = estadoActivo;
+    }
+
+    public ModalidadAtencion getModalidad() {
+        return modalidad;
+    }
+
+    public void setModalidad(ModalidadAtencion tipoModalidad) {
+        this.modalidad = tipoModalidad;
+    }
+
+    public String getDescripcionProfesional() {
+        return descripcionProfesional;
+    }
+
+    public void setDescripcionProfesional(String resumenProfesional) {
+        this.descripcionProfesional = resumenProfesional;
+    }
+
+    public String getColegiatura() {
+        return colegiatura;
+    }
+
+    public void setColegiatura(String codigoColegiatura) {
+        this.colegiatura = codigoColegiatura;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String direccionCorreo) {
+        this.correo = direccionCorreo;
+    }
+
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
+
+    public void setNumeroDocumento(String documentoIdentidad) {
+        this.numeroDocumento = documentoIdentidad;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String numeroTelefono) {
+        this.telefono = numeroTelefono;
+    }
+
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(TipoDocumento claseDocumento) {
+        this.tipoDocumento = claseDocumento;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidosCompletos) {
+        this.apellidos = apellidosCompletos;
+    }
+
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombresCompletos) {
+        this.nombres = nombresCompletos;
     }
 }

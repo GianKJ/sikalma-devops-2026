@@ -60,7 +60,7 @@ public class PacienteServicio {
         validarDuplicado(repositorio.findByNumeroDocumentoIgnoreCase(documento).orElse(null), formulario.getId(),
                 "numeroDocumento", "Ya existe un paciente con este documento.");
 
-        String correo = opcionalMinuscula(formulario.getCorreo());
+        String correo = TextoNormalizadorUtil.opcionalMinuscula(formulario.getCorreo());
         if (correo != null) {
             validarDuplicado(repositorio.findByCorreoIgnoreCase(correo).orElse(null), formulario.getId(),
                     "correo", "Ya existe un paciente con este correo.");
@@ -74,12 +74,12 @@ public class PacienteServicio {
         entidad.setFechaNacimiento(formulario.getFechaNacimiento());
         entidad.setTelefono(formulario.getTelefono().trim());
         entidad.setCorreo(correo);
-        entidad.setDireccion(opcional(formulario.getDireccion()));
-        entidad.setContactoEmergencia(opcional(formulario.getContactoEmergencia()));
-        entidad.setApoderado(opcional(formulario.getApoderado()));
-        entidad.setObservacionesAdministrativas(opcional(formulario.getObservacionesAdministrativas()));
+        entidad.setDireccion(TextoNormalizadorUtil.opcional(formulario.getDireccion()));
+        entidad.setContactoEmergencia(TextoNormalizadorUtil.opcional(formulario.getContactoEmergencia()));
+        entidad.setApoderado(TextoNormalizadorUtil.opcional(formulario.getApoderado()));
+        entidad.setObservacionesAdministrativas(TextoNormalizadorUtil.opcional(formulario.getObservacionesAdministrativas()));
         entidad.setConsentimientoRegistrado(formulario.isConsentimientoRegistrado());
-        entidad.setPreferenciasPrivacidad(opcional(formulario.getPreferenciasPrivacidad()));
+        entidad.setPreferenciasPrivacidad(TextoNormalizadorUtil.opcional(formulario.getPreferenciasPrivacidad()));
         repositorio.save(entidad);
     }
 
@@ -98,14 +98,5 @@ public class PacienteServicio {
         if (existente != null && !Objects.equals(existente.getId(), idActual)) {
             throw new RegistroDuplicadoException(campo, mensaje);
         }
-    }
-
-    private String opcional(String valor) {
-        return valor == null || valor.isBlank() ? null : valor.trim();
-    }
-
-    private String opcionalMinuscula(String valor) {
-        String normalizado = opcional(valor);
-        return normalizado == null ? null : normalizado.toLowerCase(Locale.ROOT);
     }
 }

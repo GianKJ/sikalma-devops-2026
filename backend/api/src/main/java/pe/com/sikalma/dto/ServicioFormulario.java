@@ -31,51 +31,51 @@ public class ServicioFormulario {
     @Size(max = 250, message = "El público objetivo admite hasta 250 caracteres.")
     private String publicoObjetivo;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public ModalidadAtencion getModalidad() {
-        return modalidad;
-    }
-
-    public void setModalidad(ModalidadAtencion modalidad) {
-        this.modalidad = modalidad;
+    public String getPublicoObjetivo() {
+        return this.publicoObjetivo;
     }
 
     public Integer getDuracionMinutos() {
-        return duracionMinutos;
+        return this.duracionMinutos;
     }
 
-    public void setDuracionMinutos(Integer duracionMinutos) {
-        this.duracionMinutos = duracionMinutos;
+    public ModalidadAtencion getModalidad() {
+        return this.modalidad;
     }
 
-    public String getPublicoObjetivo() {
-        return publicoObjetivo;
+    public String getDescripcion() {
+        return this.descripcion;
     }
 
-    public void setPublicoObjetivo(String publicoObjetivo) {
-        this.publicoObjetivo = publicoObjetivo;
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setPublicoObjetivo(String valorPublico) {
+        this.publicoObjetivo = valorPublico;
+    }
+
+    public void setDuracionMinutos(Integer valorDuracion) {
+        this.duracionMinutos = valorDuracion;
+    }
+
+    public void setModalidad(ModalidadAtencion valorModalidad) {
+        this.modalidad = valorModalidad;
+    }
+
+    public void setDescripcion(String valorDescripcion) {
+        this.descripcion = valorDescripcion;
+    }
+
+    public void setNombre(String valorNombre) {
+        this.nombre = valorNombre;
+    }
+
+    public void setId(Long valorId) {
+        this.id = valorId;
     }
 }

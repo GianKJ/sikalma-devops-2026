@@ -16,7 +16,7 @@
         <a class="button button--primary" th:href="@{/admin/psicologos/nuevo}">Nuevo psicólogo</a>
     </header>
 
-    <div class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}" role="status"></div>
+    <output class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}"></output>
 
     <section class="admin-section" aria-labelledby="psicologos-titulo">
         <div class="admin-section__heading">

@@ -22,6 +22,9 @@ import pe.com.sikalma.validation.ValidacionDocumento;
 @RequestMapping("/admin/pacientes")
 public class PacienteController {
 
+    private static final String VISTA_FORMULARIO = "administracion/pacientes/formulario";
+    private static final String REDIRECCION_PACIENTES = "redirect:/admin/pacientes";
+
     private final PacienteServicio servicio;
 
     public PacienteController(PacienteServicio servicio) {
@@ -38,13 +41,13 @@ public class PacienteController {
     @GetMapping("/nuevo")
     public String nuevo(Model modelo) {
         prepararFormulario(modelo, new PacienteFormulario());
-        return "administracion/pacientes/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @GetMapping("/{id}/editar")
     public String editar(@PathVariable Long id, Model modelo) {
         prepararFormulario(modelo, servicio.obtenerFormulario(id));
-        return "administracion/pacientes/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/guardar")
@@ -56,7 +59,7 @@ public class PacienteController {
         ValidacionDocumento.validarDni(formulario.getTipoDocumento(), formulario.getNumeroDocumento(), errores);
         if (errores.hasErrors()) {
             prepararFormulario(modelo, formulario);
-            return "administracion/pacientes/formulario";
+            return VISTA_FORMULARIO;
         }
 
         try {
@@ -64,18 +67,18 @@ public class PacienteController {
         } catch (RegistroDuplicadoException excepcion) {
             errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
             prepararFormulario(modelo, formulario);
-            return "administracion/pacientes/formulario";
+            return VISTA_FORMULARIO;
         }
 
         redireccion.addFlashAttribute("mensaje", "Paciente guardado correctamente.");
-        return "redirect:/admin/pacientes";
+        return REDIRECCION_PACIENTES;
     }
 
     @PostMapping("/{id}/estado")
     public String alternarEstado(@PathVariable Long id, RedirectAttributes redireccion) {
         servicio.alternarEstado(id);
         redireccion.addFlashAttribute("mensaje", "Estado del paciente actualizado.");
-        return "redirect:/admin/pacientes";
+        return REDIRECCION_PACIENTES;
     }
 
     private void prepararFormulario(Model modelo, PacienteFormulario formulario) {

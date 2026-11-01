@@ -36,8 +36,12 @@ public class Servicio extends EntidadAuditable {
     @Column(nullable = false)
     private boolean activo = true;
 
-    public Long getId() {
-        return id;
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getNombre() {
@@ -48,12 +52,8 @@ public class Servicio extends EntidadAuditable {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public Long getId() {
+        return id;
     }
 
     public ModalidadAtencion getModalidad() {

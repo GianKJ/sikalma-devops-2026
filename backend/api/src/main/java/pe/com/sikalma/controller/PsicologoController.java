@@ -25,6 +25,9 @@ import pe.com.sikalma.validation.ValidacionDocumento;
 @RequestMapping("/admin/psicologos")
 public class PsicologoController {
 
+    private static final String VISTA_FORMULARIO = "administracion/psicologos/formulario";
+    private static final String REDIRECCION_PSICOLOGOS = "redirect:/admin/psicologos";
+
     private final PsicologoServicio servicio;
     private final EspecialidadServicio especialidadServicio;
     private final ServicioPsicologicoServicio servicioPsicologicoServicio;
@@ -48,13 +51,13 @@ public class PsicologoController {
     @GetMapping("/nuevo")
     public String nuevo(Model modelo) {
         prepararFormulario(modelo, new PsicologoFormulario());
-        return "administracion/psicologos/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @GetMapping("/{id}/editar")
     public String editar(@PathVariable Long id, Model modelo) {
         prepararFormulario(modelo, servicio.obtenerFormulario(id));
-        return "administracion/psicologos/formulario";
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/guardar")
@@ -64,26 +67,24 @@ public class PsicologoController {
             Model modelo,
             RedirectAttributes redireccion) {
         ValidacionDocumento.validarDni(formulario.getTipoDocumento(), formulario.getNumeroDocumento(), errores);
-        if (errores.hasErrors()) {
-            prepararFormulario(modelo, formulario);
-            return "administracion/psicologos/formulario";
+        if (!errores.hasErrors()) {
+            try {
+                servicio.guardar(formulario);
+                redireccion.addFlashAttribute("mensaje", "Psicólogo guardado correctamente.");
+                return REDIRECCION_PSICOLOGOS;
+            } catch (RegistroDuplicadoException excepcion) {
+                errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
+            }
         }
-        try {
-            servicio.guardar(formulario);
-        } catch (RegistroDuplicadoException excepcion) {
-            errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
-            prepararFormulario(modelo, formulario);
-            return "administracion/psicologos/formulario";
-        }
-        redireccion.addFlashAttribute("mensaje", "Psicólogo guardado correctamente.");
-        return "redirect:/admin/psicologos";
+        prepararFormulario(modelo, formulario);
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/{id}/estado")
     public String alternarEstado(@PathVariable Long id, RedirectAttributes redireccion) {
         servicio.alternarEstado(id);
         redireccion.addFlashAttribute("mensaje", "Estado del psicólogo actualizado.");
-        return "redirect:/admin/psicologos";
+        return REDIRECCION_PSICOLOGOS;
     }
 
     private void prepararFormulario(Model modelo, PsicologoFormulario formulario) {
