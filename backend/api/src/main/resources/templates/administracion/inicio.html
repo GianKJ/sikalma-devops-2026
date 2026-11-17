@@ -7,71 +7,193 @@
     <title>Panel administrativo | SIKALMA</title>
     <link rel="stylesheet" th:href="@{/css/tokens.css}">
     <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
 </head>
 <body class="admin-shell">
 <div th:replace="~{fragmentos/menu-administrativo :: menu('inicio')}"></div>
+<div th:replace="~{fragmentos/bienvenida :: overlay}"></div>
 
 <main class="admin-content">
-    <header class="admin-header">
+    <header class="admin-header admin-stagger">
         <div>
-            <p class="admin-eyebrow" id="current-date-time">Panel administrativo</p>
+            <p class="admin-eyebrow" id="current-date-time" data-prefix="Panel administrativo">Panel administrativo</p>
             <h1>Gestión de SIKALMA</h1>
         </div>
-        <span class="role-label">Administrador</span>
+        <span class="role-label" th:text="${usuarioRolEtiqueta ?: 'Administrador'}">Administrador</span>
     </header>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateEl = document.getElementById('current-date-time');
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            dateEl.textContent = 'Panel administrativo • ' + now.toLocaleDateString('es-ES', options);
-        });
-    </script>
+    <!-- MÉTRICAS PRINCIPALES -->
+    <section class="kpi-grid admin-stagger admin-stagger--1" aria-label="Indicadores principales del centro">
+        <article class="kpi-card">
+            <span class="kpi-card__label">Citas registradas</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${metricas.totalCitas}">0</strong>
+            <span class="kpi-card__meta" th:text="${metricas.citasHoy + ' programadas para hoy'}">0 para hoy</span>
+        </article>
+        <article class="kpi-card kpi-card--terracotta">
+            <span class="kpi-card__label">Pacientes activos</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${metricas.pacientesActivos}">0</strong>
+            <span class="kpi-card__meta" th:text="${metricas.pacientesConConsentimiento + ' con consentimiento Ley 29733'}">0 con consentimiento</span>
+        </article>
+        <article class="kpi-card kpi-card--brown">
+            <span class="kpi-card__label">Equipo y usuarios</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${metricas.totalPsicologos}">0</strong>
+            <span class="kpi-card__meta" th:text="${metricas.totalUsuarios + ' cuentas activas · ' + metricas.totalServicios + ' servicios'}">0 cuentas</span>
+        </article>
+        <article class="kpi-card kpi-card--peach">
+            <span class="kpi-card__label">Efectividad de agenda</span>
+            <strong class="kpi-card__value" data-kpi-suffix="%" th:attr="data-kpi-target=${metricas.tasaAsistenciaPorcentaje}">0%</strong>
+            <span class="kpi-card__meta" th:text="${metricas.citasAtendidas + ' sesiones atendidas'}">0 atendidas</span>
+        </article>
+    </section>
 
-    <section class="admin-section" aria-labelledby="accesos-titulo">
+    <!-- GRÁFICOS ANIMADOS -->
+    <section class="dashboard-charts admin-stagger admin-stagger--2" aria-label="Analítica visual de citas">
+        <article class="chart-card">
+            <h3>Citas por estado y avance operativo</h3>
+            <p class="chart-card__sub">Distribución en tiempo real de todas las citas del centro psicológico.</p>
+            <div class="bar-chart">
+                <div class="bar-row" th:each="serie, iterStat : ${metricas.citasPorEstado}">
+                    <span class="bar-row__label" th:text="${serie.etiqueta}">Pendientes</span>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                             th:classappend="${iterStat.index == 0 ? 'bar-fill--terracotta' : (iterStat.index == 1 ? 'bar-fill--sage' : (iterStat.index == 2 ? 'bar-fill--sage' : (iterStat.index == 3 ? 'bar-fill--brown' : 'bar-fill--danger')))}"
+                             th:attr="data-bar-value=${serie.valor}"></div>
+                    </div>
+                    <span class="bar-row__value" th:text="${serie.valor}">0</span>
+                </div>
+            </div>
+
+            <h3 class="admin-section">Demanda por servicio psicológico</h3>
+            <p class="chart-card__sub">Atenciones agendadas según especialidad terapéutica.</p>
+            <div class="bar-chart">
+                <div class="bar-row" th:each="serie : ${metricas.citasPorServicio}">
+                    <span class="bar-row__label" th:text="${serie.etiqueta}">Servicio</span>
+                    <div class="bar-track">
+                        <div class="bar-fill bar-fill--terracotta" th:attr="data-bar-value=${serie.valor}"></div>
+                    </div>
+                    <span class="bar-row__value" th:text="${serie.valor}">0</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="chart-card">
+            <h3>Modalidad de atención</h3>
+            <p class="chart-card__sub">Comparativo Presencial vs. Virtual.</p>
+            <div class="donut-wrap">
+                <svg id="donut-modalidad"
+                     class="donut-svg"
+                     viewBox="0 0 140 140"
+                     th:attr="data-presencial=${metricas.citasPresenciales}, data-virtual=${metricas.citasVirtuales}"
+                     aria-label="Gráfico circular de modalidad">
+                    <circle class="donut-track" cx="70" cy="70" r="56"></circle>
+                    <circle id="donut-segment-presencial" class="donut-segment" cx="70" cy="70" r="56" stroke="#315f58"></circle>
+                    <circle id="donut-segment-virtual" class="donut-segment" cx="70" cy="70" r="56" stroke="#d68651"></circle>
+                </svg>
+                <div class="donut-legend">
+                    <div class="donut-legend__item">
+                        <span><span class="legend-dot legend-dot--sage"></span>Presencial</span>
+                        <strong th:text="${metricas.citasPresenciales}">0</strong>
+                    </div>
+                    <div class="donut-legend__item">
+                        <span><span class="legend-dot legend-dot--terracotta"></span>Virtual</span>
+                        <strong th:text="${metricas.citasVirtuales}">0</strong>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <!-- PRÓXIMAS CITAS -->
+    <section class="admin-section admin-stagger admin-stagger--3" aria-labelledby="proximas-titulo">
         <div class="admin-section__heading">
             <div>
-                <h2 id="accesos-titulo">Accesos principales</h2>
-                <p>Selecciona el módulo que deseas consultar.</p>
+                <h2 id="proximas-titulo">Próximas citas en agenda</h2>
+                <p>Seguimiento de turnos confirmados, en sala y pendientes.</p>
+            </div>
+            <a class="button button--primary" th:href="@{/admin/citas/nuevo}">+ Nueva cita</a>
+        </div>
+        <div class="table-frame">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Fecha y hora</th>
+                        <th>Paciente</th>
+                        <th>Profesional</th>
+                        <th>Servicio</th>
+                        <th>Modalidad</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cita : ${metricas.proximasCitas}">
+                        <td><strong th:text="${cita.fecha}"></strong><span class="cell-note" th:text="${cita.horaInicio + ' (' + cita.duracionMinutos + ' min)'}"></span></td>
+                        <td th:text="${cita.paciente.nombres + ' ' + cita.paciente.apellidos}"></td>
+                        <td th:text="${cita.psicologo.nombres + ' ' + cita.psicologo.apellidos}"></td>
+                        <td th:text="${cita.servicio.nombre}"></td>
+                        <td th:text="${cita.modalidad.etiqueta}"></td>
+                        <td><span class="status" th:classappend="${cita.estado.claseCss}" th:text="${cita.estado.etiqueta}"></span></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(metricas.proximasCitas)}">
+                        <td class="table-empty-cell" colspan="6">No hay citas próximas programadas.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACCESOS PRINCIPALES -->
+    <section class="admin-section admin-stagger admin-stagger--4" aria-labelledby="accesos-titulo">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="accesos-titulo">Módulos del sistema</h2>
+                <p>Administra la operación completa de SIKALMA.</p>
             </div>
         </div>
 
         <div class="admin-module-grid">
             <a class="admin-module" th:href="@{/admin/citas}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 <span class="admin-module__label">Agenda</span>
                 <strong>Citas</strong>
-                <p>Consulta la bandeja de citas del centro.</p>
-                <span class="admin-module__action">Abrir módulo</span>
+                <p>Registra reservas sin cruces de horario, cambia estados y emite comprobantes.</p>
+                <span class="admin-module__action">Abrir módulo →</span>
+            </a>
+            <a class="admin-module" th:href="@{/admin/usuarios}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/><path d="M4 20v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1"/></svg>
+                <span class="admin-module__label">Seguridad RBAC</span>
+                <strong>Usuarios y Roles</strong>
+                <p>Crea nuevas cuentas para Administrador, Recepción, Psicólogos y Fisioterapeutas.</p>
+                <span class="admin-module__action">Abrir módulo →</span>
             </a>
             <a class="admin-module" th:href="@{/admin/pacientes}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <span class="admin-module__label">Personas</span>
                 <strong>Pacientes</strong>
-                <p>Registra, consulta y actualiza los datos administrativos.</p>
-                <span class="admin-module__action">Abrir módulo</span>
+                <p>Registra, consulta y actualiza datos administrativos y consentimiento.</p>
+                <span class="admin-module__action">Abrir módulo →</span>
             </a>
             <a class="admin-module" th:href="@{/admin/psicologos}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg>
                 <span class="admin-module__label">Equipo</span>
                 <strong>Psicólogos</strong>
-                <p>Administra profesionales, modalidades y asignaciones.</p>
-                <span class="admin-module__action">Abrir módulo</span>
+                <p>Administra profesionales, especialidades y modalidades.</p>
+                <span class="admin-module__action">Abrir módulo →</span>
             </a>
             <a class="admin-module" th:href="@{/admin/especialidades}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 <span class="admin-module__label">Catálogo</span>
                 <strong>Especialidades</strong>
-                <p>Configura las áreas profesionales del centro.</p>
-                <span class="admin-module__action">Abrir módulo</span>
+                <p>Configura las áreas clínicas del centro.</p>
+                <span class="admin-module__action">Abrir módulo →</span>
             </a>
             <a class="admin-module" th:href="@{/admin/servicios}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 <span class="admin-module__label">Catálogo</span>
                 <strong>Servicios</strong>
-                <p>Gestiona modalidades, duración y público objetivo.</p>
-                <span class="admin-module__action">Abrir módulo</span>
+                <p>Gestiona duración, modalidad y público objetivo.</p>
+                <span class="admin-module__action">Abrir módulo →</span>
             </a>
         </div>
     </section>

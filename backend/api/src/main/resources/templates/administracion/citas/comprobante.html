@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Comprobante de Cita | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('citas')}"></div>
+
+<main class="admin-content" th:with="base=${rutaBaseCitas ?: '/admin/citas'}">
+    <header class="admin-header admin-header--actions no-print">
+        <div>
+            <p class="admin-eyebrow">Constancia de reserva</p>
+            <h1 th:text="${'Comprobante de Cita #' + cita.id}">Comprobante de Cita</h1>
+        </div>
+        <div class="row-actions">
+            <button type="button" class="button button--primary" data-print-trigger>Imprimir comprobante</button>
+            <a class="button button--secondary" th:href="@{${base}}">Volver a citas</a>
+        </div>
+    </header>
+
+    <section class="admin-section">
+        <article class="receipt-card">
+            <p class="admin-eyebrow">Centro Psicológico SIKALMA • Huánuco</p>
+            <h2 th:text="${'Reserva N.° ' + cita.id}">Reserva</h2>
+            <dl class="receipt-dl">
+                <div><dt>Paciente</dt><dd th:text="${cita.paciente.nombres + ' ' + cita.paciente.apellidos}"></dd></div>
+                <div><dt>Documento</dt><dd th:text="${cita.paciente.tipoDocumento.etiqueta + ' ' + cita.paciente.numeroDocumento}"></dd></div>
+                <div><dt>Profesional</dt><dd th:text="${cita.psicologo.nombres + ' ' + cita.psicologo.apellidos}"></dd></div>
+                <div><dt>Servicio</dt><dd th:text="${cita.servicio.nombre}"></dd></div>
+                <div><dt>Fecha</dt><dd th:text="${cita.fecha}"></dd></div>
+                <div><dt>Horario</dt><dd th:text="${cita.horaInicio + ' a ' + cita.horaFin + ' (' + cita.duracionMinutos + ' min)'}"></dd></div>
+                <div><dt>Modalidad</dt><dd th:text="${cita.modalidad.etiqueta}"></dd></div>
+                <div><dt>Estado</dt><dd th:text="${cita.estado.etiqueta}"></dd></div>
+            </dl>
+            <p class="cell-note" th:if="${cita.motivoConsulta}" th:text="${'Motivo registrado: ' + cita.motivoConsulta}"></p>
+            <p class="cell-note">Dirección: Calle Los Tulipanes 112, Amarilis, Huánuco · Teléfono: 993 668 057</p>
+        </article>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Atención Clínica | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('agenda')}"></div>
+
+<main class="admin-content">
+    <header class="admin-header admin-header--actions admin-stagger">
+        <div>
+            <p class="admin-eyebrow">Registro clínico confidencial</p>
+            <h1>Nota de evolución de sesión</h1>
+        </div>
+        <a class="button button--secondary" th:href="@{/profesional/inicio}">Volver a mi agenda</a>
+    </header>
+
+    <section class="receipt-card admin-stagger admin-stagger--1" aria-labelledby="resumen-sesion-titulo">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="resumen-sesion-titulo">Datos de la cita</h2>
+                <p th:text="${cita.servicio.nombre + ' · ' + cita.modalidad.etiqueta + ' · ' + cita.fecha + ' ' + cita.horaInicio}"></p>
+            </div>
+            <span class="status" th:classappend="${cita.estado.claseCss}" th:text="${cita.estado.etiqueta}">Estado</span>
+        </div>
+        <dl class="receipt-dl">
+            <div>
+                <dt>Paciente</dt>
+                <dd th:text="${cita.paciente.apellidos + ', ' + cita.paciente.nombres}"></dd>
+            </div>
+            <div>
+                <dt>Documento</dt>
+                <dd th:text="${cita.paciente.tipoDocumento.etiqueta + ' ' + cita.paciente.numeroDocumento}"></dd>
+            </div>
+            <div>
+                <dt>Profesional asignado</dt>
+                <dd th:text="${cita.psicologo.nombres + ' ' + cita.psicologo.apellidos}"></dd>
+            </div>
+            <div>
+                <dt>Motivo de consulta</dt>
+                <dd th:text="${cita.motivoConsulta ?: 'Sin motivo detallado'}"></dd>
+            </div>
+        </dl>
+    </section>
+
+    <section class="admin-section form-section admin-stagger admin-stagger--2">
+        <form class="entity-form"
+              th:action="@{/profesional/citas/{id}/atencion(id=${cita.id})}"
+              th:object="${formulario}"
+              method="post"
+              novalidate>
+            <input type="hidden" th:field="*{citaId}">
+            <div class="form-error-summary" th:if="${#fields.hasAnyErrors()}" role="alert">Revisa los campos clínicos señalados.</div>
+
+            <fieldset>
+                <legend>Evolución e impresión diagnóstica</legend>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="estadoClinico">Estado resultante de la sesión</label>
+                        <select id="estadoClinico" th:field="*{estado}">
+                            <option th:each="item : ${estadosClinicos}" th:value="${item}" th:text="${item.etiqueta}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{estado}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="diagnosticoReferencial">Impresión / Diagnóstico referencial</label>
+                        <input id="diagnosticoReferencial"
+                               type="text"
+                               th:field="*{diagnosticoReferencial}"
+                               maxlength="250"
+                               autocomplete="off"
+                               placeholder="Ej. Regulación emocional en progreso">
+                        <span class="field-error" th:errors="*{diagnosticoReferencial}"></span>
+                    </div>
+
+                    <div class="field field--wide">
+                        <label for="notaEvolucion">Nota de evolución clínica</label>
+                        <textarea id="notaEvolucion"
+                                  th:field="*{notaEvolucion}"
+                                  maxlength="1500"
+                                  rows="6"
+                                  placeholder="Registra objetivos trabajados, respuesta del consultante y acuerdos para la próxima sesión..."></textarea>
+                        <span class="field-error" th:errors="*{notaEvolucion}"></span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <a class="button button--secondary" th:href="@{/profesional/inicio}">Cancelar</a>
+                <button class="button button--primary" type="submit">Guardar atención clínica</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

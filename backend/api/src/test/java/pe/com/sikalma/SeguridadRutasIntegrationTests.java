@@ -57,13 +57,32 @@ class SeguridadRutasIntegrationTests {
                 .andExpect(redirectedUrlPattern("**/login"));
     }
 
-    @Test
-    void permiteIngresarConElUsuarioTemporalDeDesarrollo() throws Exception {
-        String contrasenaTemporal = userDetailsService.loadUserByUsername("user").getPassword();
+    @org.springframework.beans.factory.annotation.Autowired
+    private pe.com.sikalma.service.UsuarioSistemaServicio usuarioSistemaServicio;
 
-        mockMvc.perform(formLogin().user("user").password(contrasenaTemporal))
-                .andExpect(authenticated().withUsername("user").withRoles("ADMINISTRADOR"))
-                .andExpect(redirectedUrl("/admin/citas"));
+    @org.springframework.beans.factory.annotation.Autowired
+    private pe.com.sikalma.repository.UsuarioSistemaRepositorio usuarioSistemaRepositorio;
+
+    @Test
+    void permiteIngresarConUsuarioAdministradorRegistradoYRedirigeAlPanel() throws Exception {
+        if (usuarioSistemaRepositorio.findByUsernameIgnoreCase("adminsec").isEmpty()) {
+            pe.com.sikalma.dto.UsuarioFormulario form = new pe.com.sikalma.dto.UsuarioFormulario();
+            form.setUsername("adminsec");
+            form.setNombreCompleto("Administrador Seguridad");
+            form.setCorreo("adminsec@sikalma.test");
+            form.setPassword("Seguridad123!");
+            form.setRol(pe.com.sikalma.entity.RolUsuario.ADMINISTRADOR);
+            form.setActivo(true);
+            usuarioSistemaServicio.guardar(form);
+        }
+
+        org.springframework.security.core.userdetails.UserDetails detalles =
+                userDetailsService.loadUserByUsername("adminsec");
+        org.junit.jupiter.api.Assertions.assertNotNull(detalles);
+
+        mockMvc.perform(formLogin().user("adminsec").password("Seguridad123!"))
+                .andExpect(authenticated().withUsername("adminsec").withRoles("ADMINISTRADOR"))
+                .andExpect(redirectedUrl("/admin/inicio"));
     }
 
     @Test

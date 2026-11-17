@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Usuarios y Roles | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('usuarios')}"></div>
+
+<main class="admin-content">
+    <header class="admin-header admin-header--actions admin-stagger">
+        <div>
+            <p class="admin-eyebrow">Seguridad RBAC</p>
+            <h1>Gestión de usuarios y roles</h1>
+        </div>
+        <a class="button button--primary" th:href="@{/admin/usuarios/nuevo}">Nuevo usuario</a>
+    </header>
+
+    <output class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}"></output>
+
+    <section class="admin-section admin-stagger admin-stagger--1" aria-labelledby="usuarios-titulo">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="usuarios-titulo">Cuentas del sistema</h2>
+                <p>Control de acceso por rol con cifrado BCrypt(12).</p>
+            </div>
+        </div>
+
+        <form class="filter-bar" method="get" th:action="@{/admin/usuarios}">
+            <label class="sr-only" for="buscar-usuario">Buscar usuario</label>
+            <input id="buscar-usuario" type="search" name="buscar" th:value="${buscar}" placeholder="Usuario, nombre completo o correo">
+            <button class="button button--secondary" type="submit">Buscar</button>
+        </form>
+
+        <div class="table-frame">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre completo</th>
+                        <th>Rol asignado</th>
+                        <th>Profesional vinculado</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${usuarios}">
+                        <td><strong th:text="${item.username}"></strong></td>
+                        <td>
+                            <strong th:text="${item.nombreCompleto}"></strong>
+                            <span class="cell-note" th:text="${item.correo ?: 'Sin correo'}"></span>
+                        </td>
+                        <td><span class="role-label" th:text="${item.rol.etiqueta}"></span></td>
+                        <td th:text="${item.psicologo != null ? item.psicologo.nombres + ' ' + item.psicologo.apellidos : 'No aplica'}"></td>
+                        <td>
+                            <span class="status"
+                                  th:classappend="${item.activo} ? 'status--active' : 'status--inactive'"
+                                  th:text="${item.activo ? 'Activo' : 'Inactivo'}"></span>
+                        </td>
+                        <td class="row-actions">
+                            <a th:href="@{/admin/usuarios/{id}/editar(id=${item.id})}">Editar</a>
+                            <form th:action="@{/admin/usuarios/{id}/estado(id=${item.id})}" method="post">
+                                <button type="submit" th:text="${item.activo ? 'Desactivar' : 'Activar'}"></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(usuarios)}">
+                        <td class="table-empty-cell" colspan="6">No hay usuarios registrados.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

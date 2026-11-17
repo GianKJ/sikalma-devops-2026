@@ -13,7 +13,7 @@
 
     <groupId>pe.com.sikalma</groupId>
     <artifactId>sikalma</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>3.0.0</version>
     <name>SIKALMA</name>
     <description>Sistema web de gestión integral del Centro Psicológico SIKALMA</description>
 

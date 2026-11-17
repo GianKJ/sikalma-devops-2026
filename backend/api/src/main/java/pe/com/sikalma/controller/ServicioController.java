@@ -1,6 +1,5 @@
 package pe.com.sikalma.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import pe.com.sikalma.dto.ServicioFormulario;
 import pe.com.sikalma.entity.ModalidadAtencion;
-import pe.com.sikalma.exception.RegistroDuplicadoException;
 import pe.com.sikalma.service.ServicioPsicologicoServicio;
 
 @Controller
@@ -22,7 +21,7 @@ import pe.com.sikalma.service.ServicioPsicologicoServicio;
 public class ServicioController {
 
     private static final String VISTA_FORMULARIO = "administracion/servicios/formulario";
-    private static final String REDIRECCION_SERVICIOS = "redirect:/admin/servicios";
+    private static final String REDIRECCION_SERVICIOS = "/admin/servicios";
 
     private final ServicioPsicologicoServicio servicio;
 
@@ -55,24 +54,23 @@ public class ServicioController {
             BindingResult errores,
             Model modelo,
             RedirectAttributes redireccion) {
-        if (!errores.hasErrors()) {
-            try {
-                servicio.guardar(formulario);
-                redireccion.addFlashAttribute("mensaje", "Servicio guardado correctamente.");
-                return REDIRECCION_SERVICIOS;
-            } catch (RegistroDuplicadoException excepcion) {
-                errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
-            }
-        }
-        prepararFormulario(modelo, formulario);
-        return VISTA_FORMULARIO;
+        return ControladorUtil.procesarGuardadoConDuplicado(
+                () -> servicio.guardar(formulario),
+                errores,
+                redireccion,
+                "Servicio guardado correctamente.",
+                REDIRECCION_SERVICIOS,
+                () -> {
+                    prepararFormulario(modelo, formulario);
+                    return VISTA_FORMULARIO;
+                });
     }
 
     @PostMapping("/{id}/estado")
     public String alternarEstado(@PathVariable Long id, RedirectAttributes redireccion) {
         servicio.alternarEstado(id);
         redireccion.addFlashAttribute("mensaje", "Estado del servicio actualizado.");
-        return REDIRECCION_SERVICIOS;
+        return "redirect:" + REDIRECCION_SERVICIOS;
     }
 
     private void prepararFormulario(Model modelo, ServicioFormulario formulario) {

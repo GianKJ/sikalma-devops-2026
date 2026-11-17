@@ -110,3 +110,44 @@ BEGIN
         CONSTRAINT fk_psicologo_servicio_servicio FOREIGN KEY (servicio_id) REFERENCES dbo.servicios(id)
     )
 END;
+
+IF OBJECT_ID(N'dbo.usuarios', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.usuarios (
+        id BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT pk_usuarios PRIMARY KEY,
+        username VARCHAR(60) NOT NULL,
+        password_hash VARCHAR(120) NOT NULL,
+        nombre_completo NVARCHAR(160) NOT NULL,
+        correo VARCHAR(160) NULL,
+        rol VARCHAR(30) NOT NULL,
+        psicologo_id BIGINT NULL,
+        activo BIT NOT NULL,
+        fecha_creacion DATETIME2 NOT NULL,
+        fecha_actualizacion DATETIME2 NOT NULL,
+        CONSTRAINT uq_usuarios_username UNIQUE (username),
+        CONSTRAINT fk_usuarios_psicologo FOREIGN KEY (psicologo_id) REFERENCES dbo.psicologos(id)
+    )
+END;
+
+IF OBJECT_ID(N'dbo.citas', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.citas (
+        id BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT pk_citas PRIMARY KEY,
+        paciente_id BIGINT NOT NULL,
+        psicologo_id BIGINT NOT NULL,
+        servicio_id BIGINT NOT NULL,
+        fecha DATE NOT NULL,
+        hora_inicio TIME NOT NULL,
+        duracion_minutos INT NOT NULL,
+        modalidad VARCHAR(20) NOT NULL,
+        estado VARCHAR(20) NOT NULL,
+        motivo_consulta NVARCHAR(500) NULL,
+        nota_evolucion NVARCHAR(1500) NULL,
+        diagnostico_referencial NVARCHAR(250) NULL,
+        fecha_creacion DATETIME2 NOT NULL,
+        fecha_actualizacion DATETIME2 NOT NULL,
+        CONSTRAINT fk_citas_paciente FOREIGN KEY (paciente_id) REFERENCES dbo.pacientes(id),
+        CONSTRAINT fk_citas_psicologo FOREIGN KEY (psicologo_id) REFERENCES dbo.psicologos(id),
+        CONSTRAINT fk_citas_servicio FOREIGN KEY (servicio_id) REFERENCES dbo.servicios(id)
+    )
+END;

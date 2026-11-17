@@ -3,7 +3,6 @@ package pe.com.sikalma.service;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,6 @@ import pe.com.sikalma.dto.PsicologoFormulario;
 import pe.com.sikalma.entity.Especialidad;
 import pe.com.sikalma.entity.Psicologo;
 import pe.com.sikalma.entity.Servicio;
-import pe.com.sikalma.exception.RegistroDuplicadoException;
 import pe.com.sikalma.exception.RegistroNoEncontradoException;
 import pe.com.sikalma.repository.EspecialidadRepositorio;
 import pe.com.sikalma.repository.PsicologoRepositorio;
@@ -69,19 +67,31 @@ public class PsicologoServicio {
     @Transactional
     public void guardar(PsicologoFormulario formulario) {
         String documento = formulario.getNumeroDocumento().trim().toUpperCase(Locale.ROOT);
-        validarDuplicado(repositorio.findByNumeroDocumentoIgnoreCase(documento).orElse(null), formulario.getId(),
-                "numeroDocumento", "Ya existe un psicólogo con este documento.");
+        TextoNormalizadorUtil.validarDuplicado(
+                repositorio.findByNumeroDocumentoIgnoreCase(documento).orElse(null),
+                formulario.getId(),
+                Psicologo::getId,
+                "numeroDocumento",
+                "Ya existe un psicólogo con este documento.");
 
         String correo = TextoNormalizadorUtil.opcionalMinuscula(formulario.getCorreo());
         if (correo != null) {
-            validarDuplicado(repositorio.findByCorreoIgnoreCase(correo).orElse(null), formulario.getId(),
-                    "correo", "Ya existe un psicólogo con este correo.");
+            TextoNormalizadorUtil.validarDuplicado(
+                    repositorio.findByCorreoIgnoreCase(correo).orElse(null),
+                    formulario.getId(),
+                    Psicologo::getId,
+                    "correo",
+                    "Ya existe un psicólogo con este correo.");
         }
 
         String colegiatura = TextoNormalizadorUtil.opcionalMayuscula(formulario.getColegiatura());
         if (colegiatura != null) {
-            validarDuplicado(repositorio.findByColegiaturaIgnoreCase(colegiatura).orElse(null), formulario.getId(),
-                    "colegiatura", "Ya existe un psicólogo con esta colegiatura.");
+            TextoNormalizadorUtil.validarDuplicado(
+                    repositorio.findByColegiaturaIgnoreCase(colegiatura).orElse(null),
+                    formulario.getId(),
+                    Psicologo::getId,
+                    "colegiatura",
+                    "Ya existe un psicólogo con esta colegiatura.");
         }
 
         Psicologo entidad = formulario.getId() == null ? new Psicologo() : obtener(formulario.getId());
@@ -108,11 +118,5 @@ public class PsicologoServicio {
     private Psicologo obtener(Long id) {
         return repositorio.findById(id)
                 .orElseThrow(() -> new RegistroNoEncontradoException("El psicólogo solicitado no existe."));
-    }
-
-    private void validarDuplicado(Psicologo existente, Long idActual, String campo, String mensaje) {
-        if (existente != null && !Objects.equals(existente.getId(), idActual)) {
-            throw new RegistroDuplicadoException(campo, mensaje);
-        }
     }
 }

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title th:text="${formulario.id == null ? 'Nueva cita | SIKALMA' : 'Editar cita | SIKALMA'}"></title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('citas')}"></div>
+
+<main class="admin-content" th:with="base=${rutaBaseCitas ?: '/admin/citas'}">
+    <header class="admin-header admin-header--actions admin-stagger">
+        <div>
+            <p class="admin-eyebrow">Agenda asistencial</p>
+            <h1 th:text="${formulario.id == null ? 'Registrar cita' : 'Editar cita'}">Registrar cita</h1>
+        </div>
+        <a class="button button--secondary" th:href="@{${base}}">Cancelar</a>
+    </header>
+
+    <section class="admin-section form-section admin-stagger admin-stagger--1">
+        <form class="entity-form" th:action="@{${base + '/guardar'}}" th:object="${formulario}" method="post" novalidate>
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-error-summary" th:if="${#fields.hasAnyErrors()}" role="alert">Revisa los campos señalados.</div>
+
+            <div class="conflict-box" th:if="${errorConflicto}" role="alert">
+                <p th:text="${errorConflicto}"></p>
+                <div class="slot-chips" th:if="${not #lists.isEmpty(horariosAlternativos)}">
+                    <span>Horarios libres sugeridos:</span>
+                    <button type="button"
+                            class="slot-chip"
+                            th:each="hora : ${horariosAlternativos}"
+                            th:text="${hora}"
+                            th:attr="data-suggested-time=${hora}">11:00</button>
+                </div>
+            </div>
+
+            <fieldset>
+                <legend>Datos de la reserva</legend>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="pacienteId">Paciente</label>
+                        <select id="pacienteId" th:field="*{pacienteId}">
+                            <option value="">Seleccionar paciente</option>
+                            <option th:each="pac : ${pacientes}" th:value="${pac.id}" th:text="${pac.apellidos + ', ' + pac.nombres + ' (' + pac.numeroDocumento + ')'}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{pacienteId}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="psicologoId">Profesional</label>
+                        <select id="psicologoId" th:field="*{psicologoId}">
+                            <option value="">Seleccionar profesional</option>
+                            <option th:each="psi : ${psicologos}" th:value="${psi.id}" th:text="${psi.nombres + ' ' + psi.apellidos + ' — ' + psi.modalidad.etiqueta}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{psicologoId}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="servicioId">Servicio</label>
+                        <select id="servicioId" th:field="*{servicioId}">
+                            <option value="">Seleccionar servicio</option>
+                            <option th:each="srv : ${servicios}" th:value="${srv.id}" th:text="${srv.nombre + ' (' + srv.duracionMinutos + ' min)'}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{servicioId}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="modalidad">Modalidad</label>
+                        <select id="modalidad" th:field="*{modalidad}">
+                            <option th:each="modalidadItem : ${modalidades}" th:value="${modalidadItem}" th:text="${modalidadItem.etiqueta}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{modalidad}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="fecha">Fecha</label>
+                        <input id="fecha" type="date" th:field="*{fecha}" autocomplete="off">
+                        <span class="field-error" th:errors="*{fecha}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="horaInicio">Hora de inicio</label>
+                        <input id="horaInicio" type="time" th:field="*{horaInicio}" autocomplete="off">
+                        <span class="field-error" th:errors="*{horaInicio}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="estado">Estado de la cita</label>
+                        <select id="estado" th:field="*{estado}">
+                            <option th:each="est : ${estados}" th:value="${est}" th:text="${est.etiqueta}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{estado}"></span>
+                    </div>
+
+                    <div class="field field--wide">
+                        <label for="motivoConsulta">Motivo de consulta / Notas administrativas</label>
+                        <textarea id="motivoConsulta" th:field="*{motivoConsulta}" maxlength="500" rows="3" autocomplete="off"></textarea>
+                        <span class="field-error" th:errors="*{motivoConsulta}"></span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <a class="button button--secondary" th:href="@{${base}}">Cancelar</a>
+                <button class="button button--primary" type="submit">Guardar cita</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

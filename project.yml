@@ -1,19 +1,27 @@
+# =============================================================================
+# Configuracion Oficial de Evaluacion de Calidad (project.yml)
+# Plataforma PAAS • Universidad Continental
+# =============================================================================
+
 project:
-  name: sikalma-gestion-clinica
-  version: 1.0.0
-  description: Sistema Web para la Gestion Integral de Citas, Fichas de Atencion e Historias Clinicas en el Centro Psicologico Sikalma
-  authors: Sanchez Vilchez Giancarlo Robert, Cavero Ayzana Aldheyr Mitsui, Ramirez Soto Juan Diego
+  name: "Sistema de Gestion Clinica SIKALMA"
+  version: "3.0.0"
+  description: "Sistema web para la gestion integral de citas, fichas de atencion e historias clinicas en el Centro Psicologico Sikalma"
 
 stack:
-  frontend: auto
-  backend: auto
-  python: auto
+  detect: true
 
-database:
-  engine: postgresql
+academic:
+  course: "Pruebas y Calidad de Software"
+  evaluation_name: "Evaluacion Oficial SonarQube"
+  partial_weight_percentage: 100
 
-quality:
-  sonar: true
+evaluator:
+  name: "Mg. Maglioni Arana Caparachin"
+  email: "maranac@continental.edu.pe"
+  role: "Docente Evaluador"
 
-security:
-  trivy: true
+members:
+  - name: "Giancarlo Robert Sanchez Vilchez"
+    code: "73175492"
+    email: "73175492@continental.edu.pe"

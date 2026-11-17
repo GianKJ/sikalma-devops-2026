@@ -4,11 +4,13 @@ import ServiciosSection from './components/ServiciosSection';
 import PsicologosSection from './components/PsicologosSection';
 import AgendarCitaModal from './components/AgendarCitaModal';
 import PacientesAdmin from './components/PacientesAdmin';
+import Login from './components/Login';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('inicio');
   const [selectedServicio, setSelectedServicio] = useState(null);
   const [selectedPsicologo, setSelectedPsicologo] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const handleSelectServicio = (srv) => {
     setSelectedServicio(srv);
@@ -20,9 +22,24 @@ export default function App() {
     setActiveTab('agendar');
   };
 
+  const handleLoginSuccess = (user) => {
+    setCurrentUser(user);
+    setActiveTab('admin');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setActiveTab('inicio');
+  };
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        user={currentUser}
+        onLogout={handleLogout}
+      />
 
       <main style={{ flex: 1 }}>
         {activeTab === 'inicio' && (
@@ -75,6 +92,13 @@ export default function App() {
         {activeTab === 'admin' && (
           <PacientesAdmin />
         )}
+
+        {activeTab === 'login' && (
+          <Login 
+            onLoginSuccess={handleLoginSuccess}
+            onCancel={() => setActiveTab('inicio')}
+          />
+        )}
       </main>
 
       <footer style={{ backgroundColor: 'var(--slate-900)', color: 'var(--slate-400)', padding: '2.5rem 0', borderTop: '1px solid var(--slate-800)' }}>
@@ -83,44 +107,12 @@ export default function App() {
             <h3 style={{ color: '#ffffff', fontSize: '1.125rem', fontWeight: '800' }}>SIKALMA</h3>
             <p style={{ fontSize: '0.875rem' }}>Centro Psicológico • Huánuco, Perú | Calle Los Tulipanes 112, Amarilis</p>
             <p style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>Contacto: 993 668 057 • centropsicologicosikalma@gmail.com</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--secondary-400)', marginTop: '0.25rem' }}>⏰ Horario de Atención: Lunes a Sábado de 8:00 AM a 8:00 PM</p>
           </div>
           <div style={{ fontSize: '0.75rem' }}>
             © 2026 Centro Psicológico Sikalma. Todos los derechos reservados.
           </div>
         </div>
       </footer>
-
-      {/* Botón flotante de contacto rápido WhatsApp */}
-      <a 
-        href="https://wa.me/51993668057?text=Hola,%20deseo%20solicitar%20informaci%C3%B3n%20sobre%20las%20consultas%20psicol%C3%B3gicas%20en%20SIKALMA"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: 'fixed',
-          bottom: '24px',
-          right: '24px',
-          backgroundColor: '#25D366',
-          color: '#ffffff',
-          borderRadius: '50px',
-          padding: '12px 20px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          boxShadow: '0 4px 15px rgba(37, 211, 102, 0.4)',
-          textDecoration: 'none',
-          fontWeight: '600',
-          fontSize: '0.875rem',
-          zIndex: 1000,
-          transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-        }}
-        onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
-      >
-        <span>💬</span>
-        <span>Atención por WhatsApp</span>
-      </a>
     </div>
   );
 }
-

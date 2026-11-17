@@ -1,10 +1,14 @@
 :root {
   --brand-peach: #fac8a9;
+  --brand-peach-soft: #fde9dc;
+  --brand-cream: #fffaf6;
   --brand-taupe: #75685e;
   --brand-brown: #57402e;
   --brand-terracotta: #d68651;
+  --brand-terracotta-dark: #b96935;
   --action: #315f58;
   --action-hover: #244a45;
+  --action-soft: #e6f0ee;
   --ink: #252929;
   --ink-soft: #5d6263;
   --canvas: #f4f6f5;
@@ -14,9 +18,11 @@
   --danger: #a53d3d;
   --focus: #1f6feb;
   --shadow-soft: 0 10px 28px rgba(37, 41, 41, 0.08);
-  --radius: 6px;
-  --radius-large: 8px;
-  --content-width: 1120px;
+  --shadow-elevated: 0 20px 44px rgba(87, 64, 46, 0.14);
+  --radius: 8px;
+  --radius-large: 14px;
+  --radius-xl: 22px;
+  --content-width: 1140px;
   --font-body: "Poppins", "Segoe UI", Arial, sans-serif;
 }
 

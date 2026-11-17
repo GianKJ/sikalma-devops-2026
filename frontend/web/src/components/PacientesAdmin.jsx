@@ -165,9 +165,9 @@ export default function PacientesAdmin() {
               />
             </div>
             <div>
-              <label htmlFor="fechaNacimiento" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '600' }}>Fecha Nacimiento</label>
+              <label htmlFor="fechaNacimientoPaciente" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '600' }}>Fecha Nacimiento</label>
               <input 
-                id="fechaNacimiento"
+                id="fechaNacimientoPaciente"
                 type="date" 
                 value={nuevoPaciente.fechaNacimiento} 
                 onChange={(e) => setNuevoPaciente({ ...nuevoPaciente, fechaNacimiento: e.target.value })}

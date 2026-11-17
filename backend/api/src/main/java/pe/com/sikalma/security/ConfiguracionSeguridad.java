@@ -1,6 +1,5 @@
 package pe.com.sikalma.security;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
@@ -17,25 +16,35 @@ import org.springframework.security.web.SecurityFilterChain;
 public class ConfiguracionSeguridad {
 
     private static final String ROL_ADMINISTRADOR = "ADMINISTRADOR";
+    private static final String ROL_RECEPCIONISTA = "RECEPCIONISTA";
+    private static final String ROL_PSICOLOGO = "PSICOLOGO";
+    private static final String ROL_FISIOTERAPEUTA = "FISIOTERAPEUTA";
+    private static final String RUTA_LOGIN = "/login";
+
+    private final ManejadorIngresoExitoso manejadorIngresoExitoso;
+
+    public ConfiguracionSeguridad(ManejadorIngresoExitoso manejadorIngresoExitoso) {
+        this.manejadorIngresoExitoso = manejadorIngresoExitoso;
+    }
 
     @Bean
     SecurityFilterChain filtroSeguridad(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(autorizacion -> autorizacion
                         .requestMatchers(
-                                "/", "/inicio", "/login", "/acceso-denegado",
-                                "/css/**", "/js/**", "/img/**", "/favicon.ico",
+                                "/", "/inicio", RUTA_LOGIN, "/acceso-denegado",
+                                "/css/**", "/js/**", "/img/**", "/video/**", "/favicon.ico",
                                 "/error", "/error/**")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole(ROL_ADMINISTRADOR)
                         .requestMatchers("/recepcion/**")
-                        .hasAnyRole(ROL_ADMINISTRADOR, "RECEPCIONISTA")
+                        .hasAnyRole(ROL_ADMINISTRADOR, ROL_RECEPCIONISTA)
                         .requestMatchers("/profesional/**")
-                        .hasAnyRole(ROL_ADMINISTRADOR, "PSICOLOGO", "FISIOTERAPEUTA")
+                        .hasAnyRole(ROL_ADMINISTRADOR, ROL_PSICOLOGO, ROL_FISIOTERAPEUTA)
                         .anyRequest().authenticated())
                 .formLogin(formulario -> formulario
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/admin/citas", true)
+                        .loginPage(RUTA_LOGIN)
+                        .successHandler(manejadorIngresoExitoso)
                         .failureUrl("/login?error")
                         .permitAll())
                 .logout(salida -> salida
@@ -51,7 +60,7 @@ public class ConfiguracionSeguridad {
                         .maximumSessions(1))
                 .headers(cabeceras -> cabeceras
                         .contentSecurityPolicy(csp -> csp.policyDirectives(
-                                "default-src 'self'; img-src 'self' data:; "
+                                "default-src 'self'; img-src 'self' data:; media-src 'self'; "
                                         + "style-src 'self'; script-src 'self'; font-src 'self'; "
                                         + "form-action 'self'")));
 
@@ -60,24 +69,7 @@ public class ConfiguracionSeguridad {
 
     @Bean
     PasswordEncoder codificadorContrasenas() {
-        PasswordEncoder textoPlanoDesarrollo = new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return rawPassword == null ? "" : rawPassword.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                return rawPassword != null && rawPassword.toString().equals(encodedPassword);
-            }
-        };
-
-        Map<String, PasswordEncoder> codificadores = new HashMap<>();
-        codificadores.put("bcrypt", new BCryptPasswordEncoder(12));
-        codificadores.put("noop", textoPlanoDesarrollo);
-
-        DelegatingPasswordEncoder delegador = new DelegatingPasswordEncoder("bcrypt", codificadores);
-        delegador.setDefaultPasswordEncoderForMatches(textoPlanoDesarrollo);
-        return delegador;
+        Map<String, PasswordEncoder> codificadores = Map.of("bcrypt", new BCryptPasswordEncoder(12));
+        return new DelegatingPasswordEncoder("bcrypt", codificadores);
     }
 }

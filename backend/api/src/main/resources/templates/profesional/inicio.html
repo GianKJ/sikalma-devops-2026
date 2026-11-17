@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Agenda Clínica | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('agenda')}"></div>
+<div th:replace="~{fragmentos/bienvenida :: overlay}"></div>
+
+<main class="admin-content">
+    <header class="admin-header admin-stagger">
+        <div>
+            <p class="admin-eyebrow" id="current-date-time" data-prefix="Agenda clínica">Agenda clínica</p>
+            <h1 th:text="${profesionalVinculado != null ? 'Agenda de ' + profesionalVinculado.nombres + ' ' + profesionalVinculado.apellidos : 'Mi Agenda Clínica'}">Mi Agenda Clínica</h1>
+        </div>
+        <span class="role-label" th:text="${usuarioRolEtiqueta ?: 'Profesional'}">Profesional</span>
+    </header>
+
+    <output class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}"></output>
+
+    <section class="kpi-grid admin-stagger admin-stagger--1" aria-label="Resumen de sesiones del profesional">
+        <article class="kpi-card">
+            <span class="kpi-card__label">Sesiones asignadas</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${totalAgenda}">0</strong>
+            <span class="kpi-card__meta">Agenda clínica personalizada</span>
+        </article>
+        <article class="kpi-card kpi-card--terracotta">
+            <span class="kpi-card__label">Por atender</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${totalPendientes}">0</strong>
+            <span class="kpi-card__meta">Pendientes, confirmadas o en sala</span>
+        </article>
+        <article class="kpi-card kpi-card--brown">
+            <span class="kpi-card__label">Sesiones atendidas</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${totalAtendidas}">0</strong>
+            <span class="kpi-card__meta">Con nota de evolución registrada</span>
+        </article>
+    </section>
+
+    <section class="admin-section admin-stagger admin-stagger--2" aria-labelledby="agenda-clinica-titulo">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="agenda-clinica-titulo">Turnos programados</h2>
+                <p>Acceso restringido a tus atenciones asignadas con registro confidencial de evolución.</p>
+            </div>
+        </div>
+
+        <form class="filter-bar" method="get" th:action="@{/profesional/inicio}">
+            <label class="sr-only" for="estado-agenda">Filtrar por estado</label>
+            <select id="estado-agenda" name="estado">
+                <option value="">Todos los estados</option>
+                <option th:each="item : ${estados}" th:value="${item}" th:text="${item.etiqueta}" th:selected="${estadoSeleccionado == item}"></option>
+            </select>
+            <button class="button button--secondary" type="submit">Filtrar</button>
+        </form>
+
+        <div class="table-frame">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Fecha y hora</th>
+                        <th>Paciente</th>
+                        <th>Servicio</th>
+                        <th>Modalidad</th>
+                        <th>Estado</th>
+                        <th>Evolución clínica</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cita : ${citas}">
+                        <td>
+                            <strong th:text="${cita.fecha}"></strong>
+                            <span class="cell-note" th:text="${cita.horaInicio + ' - ' + cita.horaFin}"></span>
+                        </td>
+                        <td>
+                            <strong th:text="${cita.paciente.apellidos + ', ' + cita.paciente.nombres}"></strong>
+                            <span class="cell-note" th:text="${cita.paciente.tipoDocumento.etiqueta + ' ' + cita.paciente.numeroDocumento}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${cita.servicio.nombre}"></span>
+                            <span class="cell-note" th:if="${cita.motivoConsulta}" th:text="${cita.motivoConsulta}"></span>
+                        </td>
+                        <td th:text="${cita.modalidad.etiqueta}"></td>
+                        <td><span class="status" th:classappend="${cita.estado.claseCss}" th:text="${cita.estado.etiqueta}"></span></td>
+                        <td>
+                            <span th:if="${cita.diagnosticoReferencial}" th:text="${cita.diagnosticoReferencial}"></span>
+                            <span class="cell-note" th:if="${cita.notaEvolucion}" th:text="${#strings.abbreviate(cita.notaEvolucion, 70)}"></span>
+                            <span class="cell-note" th:unless="${cita.notaEvolucion}">Pendiente de registro clínico</span>
+                        </td>
+                        <td class="row-actions">
+                            <a th:href="@{/profesional/citas/{id}/atencion(id=${cita.id})}"
+                               th:text="${cita.estado.name() == 'ATENDIDA' ? 'Editar nota' : 'Registrar atención'}">Registrar atención</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(citas)}">
+                        <td class="table-empty-cell" colspan="7">No tienes citas asignadas para este filtro.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

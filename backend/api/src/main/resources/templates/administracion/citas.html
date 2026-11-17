@@ -7,48 +7,106 @@
     <title>Citas | SIKALMA</title>
     <link rel="stylesheet" th:href="@{/css/tokens.css}">
     <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
 </head>
 <body class="admin-shell">
 <div th:replace="~{fragmentos/menu-administrativo :: menu('citas')}"></div>
 
-<main class="admin-content">
-    <header class="admin-header">
+<main class="admin-content" th:with="base=${rutaBaseCitas ?: '/admin/citas'}">
+    <header class="admin-header admin-header--actions admin-stagger">
         <div>
-            <p class="admin-eyebrow">Agenda</p>
+            <p class="admin-eyebrow">Agenda asistencial</p>
             <h1>Gestión de citas</h1>
         </div>
-        <span class="role-label">Administrador</span>
+        <a class="button button--primary" th:href="@{${base + '/nuevo'}}">Nueva cita</a>
     </header>
 
-    <section class="admin-section" aria-labelledby="listado-citas-titulo">
+    <output class="alert alert--success" th:if="${mensaje}" th:text="${mensaje}"></output>
+
+    <section class="admin-section admin-stagger admin-stagger--1" aria-labelledby="listado-citas-titulo">
         <div class="admin-section__heading">
             <div>
                 <h2 id="listado-citas-titulo">Citas registradas</h2>
-                <p>Información administrativa de la agenda.</p>
+                <p>Agenda centralizada con control atómico de disponibilidad por psicólogo.</p>
             </div>
         </div>
 
-        <div class="table-frame table-frame--empty">
+        <form class="filter-bar" method="get" th:action="@{${base}}">
+            <label class="sr-only" for="buscar-cita">Buscar cita</label>
+            <input id="buscar-cita" type="search" name="buscar" th:value="${buscar}" placeholder="Paciente, DNI, profesional o servicio">
+
+            <label class="sr-only" for="filtro-estado">Filtrar por estado</label>
+            <select id="filtro-estado" name="estado">
+                <option value="">Todos los estados</option>
+                <option th:each="item : ${estados}" th:value="${item}" th:text="${item.etiqueta}" th:selected="${estadoSeleccionado == item}"></option>
+            </select>
+
+            <label class="sr-only" for="filtro-psicologo">Filtrar por profesional</label>
+            <select id="filtro-psicologo" name="psicologoId">
+                <option value="">Todos los profesionales</option>
+                <option th:each="psi : ${psicologos}" th:value="${psi.id}" th:text="${psi.nombres + ' ' + psi.apellidos}" th:selected="${psicologoSeleccionado == psi.id}"></option>
+            </select>
+
+            <button class="button button--secondary" type="submit">Filtrar</button>
+        </form>
+
+        <div class="table-frame">
             <div class="table-scroll">
                 <table>
                     <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Hora</th>
+                        <th>Fecha y hora</th>
                         <th>Paciente</th>
                         <th>Profesional</th>
                         <th>Servicio</th>
                         <th>Modalidad</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                    <tr th:each="cita : ${citas}">
+                        <td>
+                            <strong th:text="${cita.fecha}"></strong>
+                            <span class="cell-note" th:text="${cita.horaInicio + ' - ' + cita.horaFin + ' (' + cita.duracionMinutos + ' min)'}"></span>
+                        </td>
+                        <td>
+                            <strong th:text="${cita.paciente.apellidos + ', ' + cita.paciente.nombres}"></strong>
+                            <span class="cell-note" th:text="${cita.paciente.tipoDocumento.etiqueta + ' ' + cita.paciente.numeroDocumento}"></span>
+                        </td>
+                        <td th:text="${cita.psicologo.nombres + ' ' + cita.psicologo.apellidos}"></td>
+                        <td>
+                            <span th:text="${cita.servicio.nombre}"></span>
+                            <span class="cell-note" th:if="${cita.motivoConsulta}" th:text="${cita.motivoConsulta}"></span>
+                        </td>
+                        <td th:text="${cita.modalidad.etiqueta}"></td>
+                        <td><span class="status" th:classappend="${cita.estado.claseCss}" th:text="${cita.estado.etiqueta}"></span></td>
+                        <td class="row-actions">
+                            <a th:href="@{${base + '/' + cita.id + '/editar'}}">Editar</a>
+                            <a th:href="@{${base + '/' + cita.id + '/comprobante'}}">Comprobante</a>
+                            <form th:if="${cita.estado.name() == 'PENDIENTE'}"
+                                  th:action="@{${base + '/' + cita.id + '/estado'}}" method="post">
+                                <input type="hidden" name="estado" value="CONFIRMADA">
+                                <button type="submit">Confirmar</button>
+                            </form>
+                            <form th:if="${cita.estado.name() == 'CONFIRMADA'}"
+                                  th:action="@{${base + '/' + cita.id + '/estado'}}" method="post">
+                                <input type="hidden" name="estado" value="EN_SALA">
+                                <button type="submit">En sala</button>
+                            </form>
+                            <form th:if="${cita.estado.name() == 'EN_SALA'}"
+                                  th:action="@{${base + '/' + cita.id + '/estado'}}" method="post">
+                                <input type="hidden" name="estado" value="ATENDIDA">
+                                <button type="submit">Atendida</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(citas)}">
+                        <td class="table-empty-cell" colspan="7">No se encontraron citas con los criterios indicados.</td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
-            <output class="table-empty-state">
-                <strong>No hay citas registradas.</strong>
-                <span>La agenda se mostrará aquí cuando existan registros en la base de datos.</span>
-            </output>
         </div>
     </section>
 </main>

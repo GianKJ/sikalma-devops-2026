@@ -1,9 +1,41 @@
+# Directorios de compilacion y dependencias (Obligatorio Regla 2)
 target/
+**/target/
+node_modules/
+**/node_modules/
+coverage/
+**/coverage/
+venv/
+.venv/
+vendor/
+build/
+**/build/
+dist/
+**/dist/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!target/site/jacoco/jacoco.xml
 
-### STS ###
+# Documentos pesados, PDFs, respaldos locales y paquete PaaS separado
+/00_PROYECTO_SIKALMA_OFICIAL_CONSOLIDADO/
+/00_REGISTRO_INDECOPI_SIKALMA/
+/_Archivo_Versiones_Previas_y_Borradores/
+/extracted_images/
+/SIKALMA/
+/ENTREGA_GITLAB_PAAS_SIKALMA/
+cypress/screenshots/
+cypress/videos/
+cypress/tmp_shots/
+/*.docx
+/*.xlsx
+/*.pptx
+/*.pdf
+/*.zip
+/*.7z
+/*.py
+/*.txt
+/*.html
+
+# IDEs y Sistema Operativo
 .apt_generated
 .classpath
 .factorypath
@@ -11,41 +43,12 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
-### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradercache/
-
-### VS Code ###
-.vscode/
-
-### Operating System & Office ###
 Thumbs.db
 Desktop.ini
 .DS_Store
-~$*
-*.tmp
-
-### Environment & Secrets ###
 .env
 *.log
-example/
-examples/
-
-### Node / Frontend ###
-node_modules/
-dist/
-.cache/
-
-### Temp Folders ###
-Proyecto sikalma-*/
-backend/sikalma-devops-2026/
