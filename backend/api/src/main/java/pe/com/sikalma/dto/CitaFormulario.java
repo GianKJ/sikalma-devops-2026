@@ -78,28 +78,12 @@ public class CitaFormulario {
         this.servicioId = servicioId;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public String getDiagnosticoReferencial() {
+        return diagnosticoReferencial;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public LocalTime getHoraInicio() {
-        return horaInicio;
-    }
-
-    public void setHoraInicio(LocalTime horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
-    public ModalidadAtencion getModalidad() {
-        return modalidad;
-    }
-
-    public void setModalidad(ModalidadAtencion modalidad) {
-        this.modalidad = modalidad;
+    public void setDiagnosticoReferencial(String diagnosticoReferencial) {
+        this.diagnosticoReferencial = diagnosticoReferencial;
     }
 
     public EstadoCita getEstado() {
@@ -110,14 +94,6 @@ public class CitaFormulario {
         this.estado = estado;
     }
 
-    public String getMotivoConsulta() {
-        return motivoConsulta;
-    }
-
-    public void setMotivoConsulta(String motivoConsulta) {
-        this.motivoConsulta = motivoConsulta;
-    }
-
     public String getNotaEvolucion() {
         return notaEvolucion;
     }
@@ -126,11 +102,35 @@ public class CitaFormulario {
         this.notaEvolucion = notaEvolucion;
     }
 
-    public String getDiagnosticoReferencial() {
-        return diagnosticoReferencial;
+    public LocalTime getHoraInicio() {
+        return horaInicio;
     }
 
-    public void setDiagnosticoReferencial(String diagnosticoReferencial) {
-        this.diagnosticoReferencial = diagnosticoReferencial;
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public String getMotivoConsulta() {
+        return motivoConsulta;
+    }
+
+    public void setMotivoConsulta(String motivoConsulta) {
+        this.motivoConsulta = motivoConsulta;
+    }
+
+    public ModalidadAtencion getModalidad() {
+        return modalidad;
+    }
+
+    public void setModalidad(ModalidadAtencion modalidad) {
+        this.modalidad = modalidad;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 }
