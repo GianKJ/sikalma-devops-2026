@@ -2,14 +2,12 @@ package pe.com.sikalma.service;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pe.com.sikalma.dto.PacienteFormulario;
 import pe.com.sikalma.entity.Paciente;
-import pe.com.sikalma.exception.RegistroDuplicadoException;
 import pe.com.sikalma.exception.RegistroNoEncontradoException;
 import pe.com.sikalma.repository.PacienteRepositorio;
 
@@ -57,13 +55,21 @@ public class PacienteServicio {
     @Transactional
     public void guardar(PacienteFormulario formulario) {
         String documento = formulario.getNumeroDocumento().trim().toUpperCase(Locale.ROOT);
-        validarDuplicado(repositorio.findByNumeroDocumentoIgnoreCase(documento).orElse(null), formulario.getId(),
-                "numeroDocumento", "Ya existe un paciente con este documento.");
+        TextoNormalizadorUtil.validarDuplicado(
+                repositorio.findByNumeroDocumentoIgnoreCase(documento).orElse(null),
+                formulario.getId(),
+                Paciente::getId,
+                "numeroDocumento",
+                "Ya existe un paciente con este documento.");
 
         String correo = TextoNormalizadorUtil.opcionalMinuscula(formulario.getCorreo());
         if (correo != null) {
-            validarDuplicado(repositorio.findByCorreoIgnoreCase(correo).orElse(null), formulario.getId(),
-                    "correo", "Ya existe un paciente con este correo.");
+            TextoNormalizadorUtil.validarDuplicado(
+                    repositorio.findByCorreoIgnoreCase(correo).orElse(null),
+                    formulario.getId(),
+                    Paciente::getId,
+                    "correo",
+                    "Ya existe un paciente con este correo.");
         }
 
         Paciente entidad = formulario.getId() == null ? new Paciente() : obtener(formulario.getId());
@@ -92,11 +98,5 @@ public class PacienteServicio {
     private Paciente obtener(Long id) {
         return repositorio.findById(id)
                 .orElseThrow(() -> new RegistroNoEncontradoException("El paciente solicitado no existe."));
-    }
-
-    private void validarDuplicado(Paciente existente, Long idActual, String campo, String mensaje) {
-        if (existente != null && !Objects.equals(existente.getId(), idActual)) {
-            throw new RegistroDuplicadoException(campo, mensaje);
-        }
     }
 }

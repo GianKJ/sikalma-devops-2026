@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "SIKALMA: Backend Tests y Cobertura JaCoCo (Verde)",
+      "type": "shell",
+      "command": ".\\mvnw.cmd clean verify",
+      "options": {
+        "cwd": "${workspaceFolder}/backend/api"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "SIKALMA: Frontend Tests Unitarios Vitest (Verde)",
+      "type": "shell",
+      "command": "npm test -- --run",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend/web"
+      },
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "SIKALMA: Ejecutar TODAS las Pruebas Unitarias y de Integracion",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "SIKALMA: Backend Tests y Cobertura JaCoCo (Verde)",
+        "SIKALMA: Frontend Tests Unitarios Vitest (Verde)"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "SIKALMA: E2E Cypress Sistema 8080",
+      "type": "shell",
+      "command": "npx cypress run --config-file cypress.sikalma8080.config.js",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend/web"
+      },
+      "group": "test"
+    },
+    {
+      "label": "SIKALMA: E2E Cypress Frontend 4200",
+      "type": "shell",
+      "command": "npx cypress run",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend/web"
+      },
+      "group": "test"
+    },
+    {
+      "label": "SIKALMA: Iniciar Servidor Spring Boot (Puerto 8080)",
+      "type": "shell",
+      "command": ".\\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local",
+      "options": {
+        "cwd": "${workspaceFolder}/backend/api"
+      },
+      "isBackground": true
+    }
+  ]
+}

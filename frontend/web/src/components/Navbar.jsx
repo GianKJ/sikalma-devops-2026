@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Navbar({ activeTab, setActiveTab }) {
+export default function Navbar({ activeTab, setActiveTab, user, onLogout }) {
   return (
     <header style={{ backgroundColor: '#ffffff', borderBottom: '1px solid var(--slate-200)', position: 'sticky', top: 0, zIndex: 50 }}>
       <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px' }}>
@@ -14,7 +14,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </div>
         </div>
 
-        <nav style={{ display: 'flex', gap: '0.5rem' }}>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button 
             className={`btn ${activeTab === 'inicio' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setActiveTab('inicio')}
@@ -42,10 +42,33 @@ export default function Navbar({ activeTab, setActiveTab }) {
           <button 
             className={`btn ${activeTab === 'admin' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setActiveTab('admin')}
-            style={{ marginLeft: '1rem', borderColor: 'var(--primary-800)' }}
+            style={{ marginLeft: '0.5rem', borderColor: 'var(--primary-800)' }}
           >
-            Panel de Admisión
+            👥 Gestión Usuarios/Pacientes
           </button>
+          
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: '0.5rem' }}>
+              <span className="badge badge-green" style={{ fontSize: '0.75rem' }}>
+                👤 {user.username}
+              </span>
+              <button 
+                className="btn btn-outline"
+                style={{ padding: '0.35rem 0.65rem', fontSize: '0.75rem', borderColor: 'var(--danger-700)', color: 'var(--danger-700)' }}
+                onClick={onLogout}
+              >
+                Salir
+              </button>
+            </div>
+          ) : (
+            <button 
+              className={`btn ${activeTab === 'login' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => setActiveTab('login')}
+              style={{ marginLeft: '0.5rem', fontWeight: '700' }}
+            >
+              🔐 Iniciar Sesión
+            </button>
+          )}
         </nav>
       </div>
     </header>

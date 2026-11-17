@@ -10,7 +10,10 @@
     "test": "vitest run --coverage",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test:e2e": "cypress run --headless"
+    "cypress:open:8080": "cypress open --config-file cypress.sikalma8080.config.js",
+    "cypress:run:8080": "cypress run --config-file cypress.sikalma8080.config.js",
+    "test:e2e": "cypress run --headless",
+    "test:e2e:8080": "cypress run --config-file cypress.sikalma8080.config.js --browser chrome"
   },
   "dependencies": {
     "react": "^18.3.1",

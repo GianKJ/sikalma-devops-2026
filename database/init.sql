@@ -71,3 +71,33 @@ CREATE TABLE IF NOT EXISTS psicologo_servicio (
     servicio_id BIGINT NOT NULL REFERENCES servicios(id) ON DELETE CASCADE,
     PRIMARY KEY (psicologo_id, servicio_id)
 );
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(60) NOT NULL UNIQUE,
+    password_hash VARCHAR(120) NOT NULL,
+    nombre_completo VARCHAR(160) NOT NULL,
+    correo VARCHAR(160) UNIQUE,
+    rol VARCHAR(30) NOT NULL,
+    psicologo_id BIGINT REFERENCES psicologos(id),
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS citas (
+    id BIGSERIAL PRIMARY KEY,
+    paciente_id BIGINT NOT NULL REFERENCES pacientes(id),
+    psicologo_id BIGINT NOT NULL REFERENCES psicologos(id),
+    servicio_id BIGINT NOT NULL REFERENCES servicios(id),
+    fecha DATE NOT NULL,
+    hora_inicio TIME NOT NULL,
+    duracion_minutos INT NOT NULL,
+    modalidad VARCHAR(20) NOT NULL,
+    estado VARCHAR(20) NOT NULL,
+    motivo_consulta VARCHAR(500),
+    nota_evolucion VARCHAR(1500),
+    diagnostico_referencial VARCHAR(250),
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

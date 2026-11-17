@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "SIKALMA Desarrollo",
+      "request": "launch",
+      "mainClass": "pe.com.sikalma.SikalmaApplication",
+      "projectName": "sikalma",
+      "envFile": "${workspaceFolder}/.env",
+      "args": "--spring.profiles.active=dev"
+    },
+    {
+      "type": "java",
+      "name": "SIKALMA SQL Server",
+      "request": "launch",
+      "mainClass": "pe.com.sikalma.SikalmaApplication",
+      "projectName": "sikalma",
+      "envFile": "${workspaceFolder}/.env",
+      "args": "--spring.profiles.active=sqlserver"
+    }
+  ]
+}

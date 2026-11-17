@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title th:text="${formulario.id == null ? 'Nuevo usuario | SIKALMA' : 'Editar usuario | SIKALMA'}"></title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('usuarios')}"></div>
+
+<main class="admin-content">
+    <header class="admin-header admin-header--actions admin-stagger">
+        <div>
+            <p class="admin-eyebrow">Seguridad RBAC</p>
+            <h1 th:text="${formulario.id == null ? 'Registrar usuario' : 'Editar usuario'}">Registrar usuario</h1>
+        </div>
+        <a class="button button--secondary" th:href="@{/admin/usuarios}">Cancelar</a>
+    </header>
+
+    <section class="admin-section form-section admin-stagger admin-stagger--1">
+        <form class="entity-form entity-form--compact" th:action="@{/admin/usuarios/guardar}" th:object="${formulario}" method="post" novalidate>
+            <input type="hidden" th:field="*{id}">
+            <div class="form-error-summary" th:if="${#fields.hasAnyErrors()}" role="alert">Revisa los campos señalados.</div>
+
+            <fieldset>
+                <legend>Credenciales y perfil</legend>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="username">Usuario de acceso</label>
+                        <input id="username" type="text" th:field="*{username}" maxlength="60" autocomplete="username">
+                        <span class="field-error" th:errors="*{username}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="rol">Rol del sistema</label>
+                        <select id="rol" th:field="*{rol}">
+                            <option th:each="r : ${roles}" th:value="${r}" th:text="${r.etiqueta}"></option>
+                        </select>
+                        <span class="field-error" th:errors="*{rol}"></span>
+                    </div>
+
+                    <div class="field field--wide">
+                        <label for="nombreCompleto">Nombre completo</label>
+                        <input id="nombreCompleto" type="text" th:field="*{nombreCompleto}" maxlength="160" autocomplete="name">
+                        <span class="field-error" th:errors="*{nombreCompleto}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="correo">Correo electrónico</label>
+                        <input id="correo" type="email" th:field="*{correo}" maxlength="160" autocomplete="email">
+                        <span class="field-error" th:errors="*{correo}"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="psicologoId">Vincular a profesional (opcional)</label>
+                        <select id="psicologoId" th:field="*{psicologoId}">
+                            <option value="">Sin vínculo clínico</option>
+                            <option th:each="psi : ${psicologos}" th:value="${psi.id}" th:text="${psi.nombres + ' ' + psi.apellidos}"></option>
+                        </select>
+                    </div>
+
+                    <div class="field field--wide">
+                        <label for="password" th:text="${formulario.id == null ? 'Contraseña inicial (mínimo 6 caracteres)' : 'Nueva contraseña (dejar en blanco para mantener actual)'}">Contraseña</label>
+                        <input id="password" type="password" th:field="*{password}" maxlength="100" autocomplete="new-password">
+                        <span class="field-error" th:errors="*{password}"></span>
+                    </div>
+
+                    <div class="field field--wide">
+                        <label class="check-field">
+                            <input type="checkbox" th:field="*{activo}">
+                            <span>Cuenta habilitada para iniciar sesión</span>
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <a class="button button--secondary" th:href="@{/admin/usuarios}">Cancelar</a>
+                <button class="button button--primary" type="submit">Guardar usuario</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

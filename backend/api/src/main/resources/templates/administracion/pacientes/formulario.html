@@ -7,17 +7,18 @@
     <title th:text="${formulario.id == null ? 'Nuevo paciente | SIKALMA' : 'Editar paciente | SIKALMA'}"></title>
     <link rel="stylesheet" th:href="@{/css/tokens.css}">
     <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
 </head>
-<body class="admin-shell">
+<body class="admin-shell" th:with="base=${rutaBasePacientes ?: '/admin/pacientes'}">
 <div th:replace="~{fragmentos/menu-administrativo :: menu('pacientes')}"></div>
 <main class="admin-content">
     <header class="admin-header admin-header--actions">
         <div><p class="admin-eyebrow">Pacientes</p><h1 th:text="${formulario.id == null ? 'Registrar paciente' : 'Editar paciente'}"></h1></div>
-        <a class="button button--secondary" th:href="@{/admin/pacientes}">Cancelar</a>
+        <a class="button button--secondary" th:href="@{${base}}">Cancelar</a>
     </header>
 
     <section class="admin-section form-section" aria-labelledby="datos-paciente">
-        <form class="entity-form" th:action="@{/admin/pacientes/guardar}" th:object="${formulario}" method="post" novalidate>
+        <form class="entity-form" th:action="@{${base + '/guardar'}}" th:object="${formulario}" method="post" novalidate>
             <input type="hidden" th:field="*{id}">
             <div class="form-error-summary" th:if="${#fields.hasAnyErrors()}" role="alert">Revisa los campos señalados.</div>
 
@@ -101,7 +102,7 @@
             </fieldset>
 
             <div class="form-actions">
-                <a class="button button--secondary" th:href="@{/admin/pacientes}">Cancelar</a>
+                <a class="button button--secondary" th:href="@{${base}}">Cancelar</a>
                 <button class="button button--primary" type="submit">Guardar paciente</button>
             </div>
         </form>

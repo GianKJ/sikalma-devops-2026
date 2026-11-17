@@ -1,6 +1,5 @@
 package pe.com.sikalma.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import pe.com.sikalma.dto.EspecialidadFormulario;
-import pe.com.sikalma.exception.RegistroDuplicadoException;
 import pe.com.sikalma.service.EspecialidadServicio;
 
 @Controller
@@ -21,7 +20,7 @@ import pe.com.sikalma.service.EspecialidadServicio;
 public class EspecialidadController {
 
     private static final String VISTA_FORMULARIO = "administracion/especialidades/formulario";
-    private static final String REDIRECCION_ESPECIALIDADES = "redirect:/admin/especialidades";
+    private static final String REDIRECCION_ESPECIALIDADES = "/admin/especialidades";
 
     private final EspecialidadServicio servicio;
 
@@ -53,22 +52,19 @@ public class EspecialidadController {
             @Valid @ModelAttribute("formulario") EspecialidadFormulario formulario,
             BindingResult errores,
             RedirectAttributes redireccion) {
-        if (!errores.hasErrors()) {
-            try {
-                servicio.guardar(formulario);
-                redireccion.addFlashAttribute("mensaje", "Especialidad guardada correctamente.");
-                return REDIRECCION_ESPECIALIDADES;
-            } catch (RegistroDuplicadoException excepcion) {
-                errores.rejectValue(excepcion.getCampo(), "registro.duplicado", excepcion.getMessage());
-            }
-        }
-        return VISTA_FORMULARIO;
+        return ControladorUtil.procesarGuardadoConDuplicado(
+                () -> servicio.guardar(formulario),
+                errores,
+                redireccion,
+                "Especialidad guardada correctamente.",
+                REDIRECCION_ESPECIALIDADES,
+                () -> VISTA_FORMULARIO);
     }
 
     @PostMapping("/{id}/estado")
     public String alternarEstado(@PathVariable Long id, RedirectAttributes redireccion) {
         servicio.alternarEstado(id);
         redireccion.addFlashAttribute("mensaje", "Estado de la especialidad actualizado.");
-        return REDIRECCION_ESPECIALIDADES;
+        return "redirect:" + REDIRECCION_ESPECIALIDADES;
     }
 }

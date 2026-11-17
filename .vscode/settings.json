@@ -1,0 +1,15 @@
+{
+  "java.import.maven.enabled": true,
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.test.config": {
+    "name": "SIKALMA JUnit 5 (backend/api)",
+    "workingDirectory": "${workspaceFolder}/backend/api",
+    "args": [],
+    "vmArgs": [
+      "-Dspring.profiles.active=test"
+    ]
+  },
+  "vitest.rootConfig": "${workspaceFolder}/frontend/web/vite.config.js",
+  "vitest.packagePath": "${workspaceFolder}/frontend/web/package.json",
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
+}

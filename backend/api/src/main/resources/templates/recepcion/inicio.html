@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Recepción y Agenda | SIKALMA</title>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script defer th:src="@{/js/admin.js}"></script>
+</head>
+<body class="admin-shell">
+<div th:replace="~{fragmentos/menu-administrativo :: menu('inicio')}"></div>
+<div th:replace="~{fragmentos/bienvenida :: overlay}"></div>
+
+<main class="admin-content">
+    <header class="admin-header admin-stagger">
+        <div>
+            <p class="admin-eyebrow" id="current-date-time" data-prefix="Panel de recepción">Panel de recepción</p>
+            <h1>Recepción y Agenda SIKALMA</h1>
+        </div>
+        <span class="role-label" th:text="${usuarioRolEtiqueta ?: 'Recepcionista'}">Recepcionista</span>
+    </header>
+
+    <section class="kpi-grid admin-stagger admin-stagger--1" aria-label="Indicadores de recepción">
+        <article class="kpi-card">
+            <span class="kpi-card__label">Citas en agenda</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${metricas.totalCitas}">0</strong>
+            <span class="kpi-card__meta" th:text="${metricas.citasHoy + ' programadas para hoy'}">0 para hoy</span>
+        </article>
+        <article class="kpi-card kpi-card--terracotta">
+            <span class="kpi-card__label">En sala de espera</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${metricas.citasEnSala}">0</strong>
+            <span class="kpi-card__meta" th:text="${metricas.citasConfirmadas + ' confirmadas · ' + metricas.citasPendientes + ' pendientes'}">0 confirmadas</span>
+        </article>
+        <article class="kpi-card kpi-card--brown">
+            <span class="kpi-card__label">Pacientes activos</span>
+            <strong class="kpi-card__value" th:attr="data-kpi-target=${metricas.pacientesActivos}">0</strong>
+            <span class="kpi-card__meta" th:text="${metricas.pacientesConConsentimiento + ' con consentimiento Ley 29733'}">0 con consentimiento</span>
+        </article>
+        <article class="kpi-card kpi-card--peach">
+            <span class="kpi-card__label">Cumplimiento de citas</span>
+            <strong class="kpi-card__value" data-kpi-suffix="%" th:attr="data-kpi-target=${metricas.tasaAsistenciaPorcentaje}">0%</strong>
+            <span class="kpi-card__meta" th:text="${metricas.citasAtendidas + ' sesiones atendidas'}">0 atendidas</span>
+        </article>
+    </section>
+
+    <section class="dashboard-charts admin-stagger admin-stagger--2" aria-label="Estado de agenda en recepción">
+        <article class="chart-card">
+            <h3>Flujo operativo de citas</h3>
+            <p class="chart-card__sub">Distribución de atenciones desde reserva hasta consulta.</p>
+            <div class="bar-chart">
+                <div class="bar-row" th:each="serie, iterStat : ${metricas.citasPorEstado}">
+                    <span class="bar-row__label" th:text="${serie.etiqueta}">Pendientes</span>
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                             th:classappend="${iterStat.index == 0 ? 'bar-fill--terracotta' : (iterStat.index == 1 ? 'bar-fill--sage' : (iterStat.index == 2 ? 'bar-fill--sage' : (iterStat.index == 3 ? 'bar-fill--brown' : 'bar-fill--danger')))}"
+                             th:attr="data-bar-value=${serie.valor}"></div>
+                    </div>
+                    <span class="bar-row__value" th:text="${serie.valor}">0</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="chart-card">
+            <h3>Modalidad de atención</h3>
+            <p class="chart-card__sub">Presencial vs. Virtual en agenda actual.</p>
+            <div class="donut-wrap">
+                <svg id="donut-modalidad"
+                     class="donut-svg"
+                     viewBox="0 0 140 140"
+                     th:attr="data-presencial=${metricas.citasPresenciales}, data-virtual=${metricas.citasVirtuales}"
+                     aria-label="Gráfico circular de modalidad">
+                    <circle class="donut-track" cx="70" cy="70" r="56"></circle>
+                    <circle id="donut-segment-presencial" class="donut-segment" cx="70" cy="70" r="56" stroke="#315f58"></circle>
+                    <circle id="donut-segment-virtual" class="donut-segment" cx="70" cy="70" r="56" stroke="#d68651"></circle>
+                </svg>
+                <div class="donut-legend">
+                    <div class="donut-legend__item">
+                        <span><span class="legend-dot legend-dot--sage"></span>Presencial</span>
+                        <strong th:text="${metricas.citasPresenciales}">0</strong>
+                    </div>
+                    <div class="donut-legend__item">
+                        <span><span class="legend-dot legend-dot--terracotta"></span>Virtual</span>
+                        <strong th:text="${metricas.citasVirtuales}">0</strong>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <section class="admin-section admin-stagger admin-stagger--3" aria-labelledby="recepcion-proximas">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="recepcion-proximas">Próximos turnos en recepción</h2>
+                <p>Confirma llegada de pacientes, registra ingresos a sala o imprime comprobantes.</p>
+            </div>
+            <a class="button button--primary" th:href="@{/recepcion/citas/nuevo}">+ Nueva cita</a>
+        </div>
+        <div class="table-frame">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Fecha y hora</th>
+                        <th>Paciente</th>
+                        <th>Profesional</th>
+                        <th>Servicio</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cita : ${metricas.proximasCitas}">
+                        <td><strong th:text="${cita.fecha}"></strong><span class="cell-note" th:text="${cita.horaInicio + ' (' + cita.duracionMinutos + ' min)'}"></span></td>
+                        <td th:text="${cita.paciente.apellidos + ', ' + cita.paciente.nombres}"></td>
+                        <td th:text="${cita.psicologo.nombres + ' ' + cita.psicologo.apellidos}"></td>
+                        <td th:text="${cita.servicio.nombre}"></td>
+                        <td><span class="status" th:classappend="${cita.estado.claseCss}" th:text="${cita.estado.etiqueta}"></span></td>
+                        <td class="row-actions">
+                            <a th:href="@{/recepcion/citas/{id}/editar(id=${cita.id})}">Gestionar</a>
+                            <a th:href="@{/recepcion/citas/{id}/comprobante(id=${cita.id})}">Comprobante</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(metricas.proximasCitas)}">
+                        <td class="table-empty-cell" colspan="6">No hay citas próximas programadas.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="admin-section admin-stagger admin-stagger--4" aria-labelledby="recepcion-accesos">
+        <div class="admin-section__heading">
+            <div>
+                <h2 id="recepcion-accesos">Operaciones de recepción</h2>
+                <p>Accesos rápidos para admisión de pacientes y programación diaria.</p>
+            </div>
+        </div>
+        <div class="admin-module-grid">
+            <a class="admin-module" th:href="@{/recepcion/citas}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span class="admin-module__label">Agenda</span>
+                <strong>Gestionar citas</strong>
+                <p>Consulta horarios ocupados, evita cruces y actualiza la llegada a sala.</p>
+                <span class="admin-module__action">Ir a citas →</span>
+            </a>
+            <a class="admin-module" th:href="@{/recepcion/citas/nuevo}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                <span class="admin-module__label">Reserva rápida</span>
+                <strong>Registrar nueva cita</strong>
+                <p>Asigna psicólogo o fisioterapeuta validando disponibilidad en línea.</p>
+                <span class="admin-module__action">Agendar ahora →</span>
+            </a>
+            <a class="admin-module" th:href="@{/recepcion/pacientes}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span class="admin-module__label">Admisión</span>
+                <strong>Directorio de pacientes</strong>
+                <p>Busca por DNI, actualiza teléfonos de contacto y verifica consentimiento.</p>
+                <span class="admin-module__action">Ver pacientes →</span>
+            </a>
+            <a class="admin-module" th:href="@{/recepcion/pacientes/nuevo}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                <span class="admin-module__label">Alta rápida</span>
+                <strong>Nuevo paciente</strong>
+                <p>Inscribe nuevos consultantes o apoderados infantiles en segundos.</p>
+                <span class="admin-module__action">Registrar paciente →</span>
+            </a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

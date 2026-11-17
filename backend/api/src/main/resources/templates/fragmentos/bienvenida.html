@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenida de Rol - SIKALMA</title>
+</head>
+<body>
+<div th:fragment="overlay"
+     th:if="${bienvenidaActiva}"
+     id="welcome-overlay"
+     class="welcome-overlay"
+     th:classappend="${'welcome-overlay--' + bienvenidaRolCodigo}"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="welcome-title">
+    <div class="welcome-card">
+        <div class="welcome-orbit">
+            <span class="welcome-orbit__ring" aria-hidden="true"></span>
+            <img th:src="@{/img/isotipo-sikalma.png}" alt="Isotipo SIKALMA">
+        </div>
+        <span class="welcome-badge" th:text="${bienvenidaRolEtiqueta}">Administrador</span>
+        <h2 id="welcome-title" th:text="${'¡Bienvenido(a), ' + bienvenidaNombre + '!'}">¡Bienvenido(a)!</h2>
+        <p th:text="${bienvenidaDescripcion}">Panel de gestión SIKALMA</p>
+        <div class="welcome-progress-track" aria-hidden="true">
+            <div class="welcome-progress-fill"></div>
+        </div>
+        <button id="welcome-skip-btn" type="button" class="button button--primary">
+            Continuar al panel
+        </button>
+    </div>
+</div>
+</body>
+</html>

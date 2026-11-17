@@ -1,6 +1,10 @@
 package pe.com.sikalma.service;
 
 import java.util.Locale;
+import java.util.Objects;
+import java.util.function.Function;
+
+import pe.com.sikalma.exception.RegistroDuplicadoException;
 
 public final class TextoNormalizadorUtil {
 
@@ -19,5 +23,16 @@ public final class TextoNormalizadorUtil {
     public static String opcionalMayuscula(String valor) {
         String normalizado = opcional(valor);
         return normalizado == null ? null : normalizado.toUpperCase(Locale.ROOT);
+    }
+
+    public static <T> void validarDuplicado(
+            T existente,
+            Long idActual,
+            Function<T, Long> idExtractor,
+            String campo,
+            String mensaje) {
+        if (existente != null && !Objects.equals(idExtractor.apply(existente), idActual)) {
+            throw new RegistroDuplicadoException(campo, mensaje);
+        }
     }
 }

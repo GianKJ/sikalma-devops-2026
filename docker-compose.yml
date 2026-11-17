@@ -1,21 +1,16 @@
-version: '3.8'
-
 services:
-  # -------------------------------------------------------------
-  # 1. Base de Datos Relacional: PostgreSQL 16 Alpine
-  # -------------------------------------------------------------
   sikalma-db:
     image: postgres:16-alpine
-    container_name: sikalma-postgres
-    restart: always
+    container_name: sikalma-postgres-v3
+    restart: unless-stopped
     environment:
       POSTGRES_DB: sikalma_db
       POSTGRES_USER: sikalma_user
       POSTGRES_PASSWORD: sikalma_password_2026
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - sikalma_pgdata:/var/lib/postgresql/data
+      - sikalma_pgdata_v3:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
       - ./database/seeds.sql:/docker-entrypoint-initdb.d/02_seeds.sql:ro
     healthcheck:
@@ -26,19 +21,17 @@ services:
     networks:
       - sikalma-network
 
-  # -------------------------------------------------------------
-  # 2. Backend API REST: Spring Boot 3 + Java 21 (Temurin)
-  # -------------------------------------------------------------
   sikalma-backend:
     build:
       context: ./backend/api
       dockerfile: Dockerfile
-    container_name: sikalma-backend-api
-    restart: always
+    image: thegian/sikalma-backend:latest
+    container_name: sikalma-backend-v3
+    restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "8080:8080"
     environment:
-      PORT: 3000
+      PORT: 8080
       SPRING_PROFILES_ACTIVE: postgres
       DB_HOST: sikalma-db
       DB_PORT: 5432
@@ -51,27 +44,25 @@ services:
     networks:
       - sikalma-network
 
-  # -------------------------------------------------------------
-  # 3. Frontend Web SPA: React 18 + Vite + Tailwind CSS + Serve
-  # -------------------------------------------------------------
   sikalma-frontend:
     build:
       context: ./frontend/web
       dockerfile: Dockerfile
-    container_name: sikalma-frontend-web
-    restart: always
+    image: thegian/sikalma-frontend:latest
+    container_name: sikalma-frontend-v3
+    restart: unless-stopped
     ports:
       - "4200:4200"
     environment:
       PORT: 4200
-      VITE_API_URL: http://localhost:3000
+      VITE_API_URL: http://localhost:8080
     depends_on:
       - sikalma-backend
     networks:
       - sikalma-network
 
 volumes:
-  sikalma_pgdata:
+  sikalma_pgdata_v3:
     driver: local
 
 networks:

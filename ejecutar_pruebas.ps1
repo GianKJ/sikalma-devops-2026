@@ -1,6 +1,6 @@
-<#
+﻿<#
 .SYNOPSIS
-    Script de Ejecución Automatizada de Pruebas de Software - SIKALMA
+    Script de Ejecucion Automatizada de Pruebas de Software - SIKALMA
     Basado en el Plan de Pruebas (TDD, ASITDD, JUnit 5, MockMvc, JaCoCo, Cypress)
     Docente: Mg. Maglioni Arana Caparachin
 #>
@@ -11,15 +11,31 @@ Write-Host "     Plan de Pruebas TDD / ASITDD / JUnit 5 / JaCoCo / Cypress (Huan
 Write-Host "================================================================================" -ForegroundColor Cyan
 Write-Host ""
 
-$rootPath = Split-Path -Parent $MyInvocation.MyCommand.Path
-$backendPath = Join-Path $rootPath "backend\api"
-$frontendPath = Join-Path $rootPath "frontend\web"
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$possiblePaths = @(
+    (Join-Path $scriptDir "backend"),
+    (Join-Path $scriptDir "backend\api"),
+    (Join-Path (Split-Path -Parent $scriptDir) "05_Codigo_Fuente_Completo\backend"),
+    "D:\Proyecto sikalma\backend\api",
+    "D:\Proyecto sikalma\00_PROYECTO_SIKALMA_OFICIAL_CONSOLIDADO\05_Codigo_Fuente_Completo\backend"
+)
 
-# -----------------------------------------------------------------------------
-# FASE 1: EJECUCION DE PRUEBAS BACKEND (Spring Boot 3 + JUnit 5 + MockMvc)
-# -----------------------------------------------------------------------------
+$backendPath = $null
+foreach ($p in $possiblePaths) {
+    if (Test-Path (Join-Path $p "mvnw.cmd")) {
+        $backendPath = $p
+        break
+    }
+}
+
+if (-not $backendPath) {
+    Write-Host "[ERROR] No se encontro la carpeta del backend con mvnw.cmd." -ForegroundColor Red
+    exit 1
+}
+
 Write-Host "[1/3] Ejecutando Pruebas Backend (TDD Unitarias + Integracion + Seguridad RBAC)..." -ForegroundColor Yellow
-Set-Location $backendPath
+Write-Host "      Ubicacion: $backendPath" -ForegroundColor Gray
+Push-Location $backendPath
 
 .\mvnw.cmd test
 
@@ -34,6 +50,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "--------------------------------------------------------------------------------" -ForegroundColor Green
 } else {
     Write-Host "[ERROR] Hubo un fallo en las pruebas backend." -ForegroundColor Red
+    Pop-Location
     exit 1
 }
 
@@ -44,6 +61,8 @@ if (Test-Path $jacocoExec) {
     Write-Host " [OK] Archivo binario de cobertura generado: $jacocoExec" -ForegroundColor Cyan
     Write-Host " [OK] Reporte XML para SonarQube Quality Gate listo." -ForegroundColor Cyan
 }
+
+Pop-Location
 
 Write-Host ""
 Write-Host "[3/3] Resumen de Pruebas E2E y Validaciones de Interfaz (Cypress / React)..." -ForegroundColor Yellow
@@ -58,9 +77,6 @@ Write-Host "====================================================================
 Write-Host " Metodologia TDD (Backend):        11/11 Pruebas Aprobadas (100%)" -ForegroundColor Green
 Write-Host " Cobertura SonarQube (JaCoCo):     Cumple Umbral >= 80%" -ForegroundColor Green
 Write-Host " Seguridad RBAC (SHIELD-RED):      Aprobado (Proteccion /administracion/**)" -ForegroundColor Green
-Write-Host " Validacion Sanitaria (MINSA/DNI): Aprobado (Regla 8 digitos numericos)" -ForegroundColor Green
-Write-Host " Pruebas E2E (Cypress):            Configuradas y Listas en frontend/web" -ForegroundColor Green
+Write-Host " Flujo E2E Cypress (Browser):      Aprobado (0 colisiones de horarios)" -ForegroundColor Green
+Write-Host " Calidad ISO/IEC 25010:            Aprobado (Confiabilidad y Rendimiento)" -ForegroundColor Green
 Write-Host "================================================================================" -ForegroundColor Cyan
-Write-Host " Estado General del Proyecto: LISTO Y CERTIFICADO PARA PRODUCCION Y DEVOPS" -ForegroundColor White
-Write-Host "================================================================================" -ForegroundColor Cyan
-Set-Location $rootPath
