@@ -34,6 +34,7 @@ public class CitaController {
     private static final String RUTA_ADMIN = "/admin/citas";
     private static final String RUTA_RECEPCION = "/recepcion/citas";
     private static final String VISTA_FORMULARIO = "administracion/citas/formulario";
+    private static final String ATTR_RUTA_BASE_CITAS = "rutaBaseCitas";
 
     private final CitaServicio citaServicio;
     private final PacienteServicio pacienteServicio;
@@ -64,7 +65,7 @@ public class CitaController {
         modelo.addAttribute("psicologoSeleccionado", psicologoId);
         modelo.addAttribute("estados", EstadoCita.values());
         modelo.addAttribute("psicologos", psicologoServicio.listar(null));
-        modelo.addAttribute("rutaBaseCitas", ControladorUtil.resolverBaseRuta(request, RUTA_ADMIN, RUTA_RECEPCION));
+        modelo.addAttribute(ATTR_RUTA_BASE_CITAS, ControladorUtil.resolverBaseRuta(request, RUTA_ADMIN, RUTA_RECEPCION));
         return "administracion/citas";
     }
 
@@ -119,7 +120,7 @@ public class CitaController {
     @GetMapping("/{id}/comprobante")
     public String comprobante(@PathVariable Long id, HttpServletRequest request, Model modelo) {
         modelo.addAttribute("cita", citaServicio.obtenerPorId(id));
-        modelo.addAttribute("rutaBaseCitas", ControladorUtil.resolverBaseRuta(request, RUTA_ADMIN, RUTA_RECEPCION));
+        modelo.addAttribute(ATTR_RUTA_BASE_CITAS, ControladorUtil.resolverBaseRuta(request, RUTA_ADMIN, RUTA_RECEPCION));
         return "administracion/citas/comprobante";
     }
 
@@ -130,6 +131,6 @@ public class CitaController {
         modelo.addAttribute("servicios", servicioPsicologicoServicio.listarActivos());
         modelo.addAttribute("modalidades", new ModalidadAtencion[]{ModalidadAtencion.PRESENCIAL, ModalidadAtencion.VIRTUAL});
         modelo.addAttribute("estados", EstadoCita.values());
-        modelo.addAttribute("rutaBaseCitas", ControladorUtil.resolverBaseRuta(request, RUTA_ADMIN, RUTA_RECEPCION));
+        modelo.addAttribute(ATTR_RUTA_BASE_CITAS, ControladorUtil.resolverBaseRuta(request, RUTA_ADMIN, RUTA_RECEPCION));
     }
 }

@@ -2,7 +2,7 @@ package pe.com.sikalma.service;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.function.Function;
+import java.util.function.ToLongFunction;
 
 import pe.com.sikalma.exception.RegistroDuplicadoException;
 
@@ -28,10 +28,10 @@ public final class TextoNormalizadorUtil {
     public static <T> void validarDuplicado(
             T existente,
             Long idActual,
-            Function<T, Long> idExtractor,
+            ToLongFunction<T> idExtractor,
             String campo,
             String mensaje) {
-        if (existente != null && !Objects.equals(idExtractor.apply(existente), idActual)) {
+        if (existente != null && !Objects.equals(idExtractor.applyAsLong(existente), idActual)) {
             throw new RegistroDuplicadoException(campo, mensaje);
         }
     }

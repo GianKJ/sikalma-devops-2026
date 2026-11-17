@@ -100,26 +100,23 @@ public class InicializadorDatosDemo implements ApplicationRunner {
                 "Sesiones presenciales de rehabilitación motora y alivio muscular guiado.",
                 ModalidadAtencion.PRESENCIAL, 50, "Adolescentes y adultos");
 
-        Psicologo psiMaryory = crearPsicologo("46210985", "Maryory Viviana", "Sánchez Vílchez",
-                "C.Ps.P. 61905", "993668057", "maryory.sanchez@sikalma.pe",
+        Psicologo psiMaryory = basePsicologo("46210985", "Maryory Viviana", "Sánchez Vílchez",
+                "C.Ps.P. 61905", ModalidadAtencion.AMBAS);
+        psiMaryory = guardarPsicologo(psiMaryory, "993668057", "maryory.sanchez@sikalma.pe",
                 "Psicóloga Clínica y CEO de SIKALMA. Especialista en terapia de parejas, psicoterapia sistémica, TREC, TCC y duelo.",
-                ModalidadAtencion.AMBAS,
-                Set.of(espClinica, espFamiliar),
-                Set.of(srvIndividual, srvPareja, srvVocacional));
+                Set.of(espClinica, espFamiliar), Set.of(srvIndividual, srvPareja, srvVocacional));
 
-        Psicologo psiJudith = crearPsicologo("47851209", "Judith", "Campos Pomachagua",
-                "C.Ps.P. 41280", "962418502", "judith.campos@sikalma.pe",
+        Psicologo psiJudith = basePsicologo("47851209", "Judith", "Campos Pomachagua",
+                "C.Ps.P. 41280", ModalidadAtencion.PRESENCIAL);
+        psiJudith = guardarPsicologo(psiJudith, "962418502", "judith.campos@sikalma.pe",
                 "Psicóloga especialista en TEA, análisis aplicado de conducta y estimulación en SIKALMA KIDS.",
-                ModalidadAtencion.PRESENCIAL,
-                Set.of(espInfantil),
-                Set.of(srvInfantil));
+                Set.of(espInfantil), Set.of(srvInfantil));
 
-        Psicologo psiAntony = crearPsicologo("71029384", "Antony", "Pérez Fernández",
-                "C.T.M.P. 14890", "984210945", "antony.perez@sikalma.pe",
+        Psicologo psiAntony = basePsicologo("71029384", "Antony", "Pérez Fernández",
+                "C.T.M.P. 14890", ModalidadAtencion.PRESENCIAL);
+        psiAntony = guardarPsicologo(psiAntony, "984210945", "antony.perez@sikalma.pe",
                 "Fisioterapeuta especialista en terapia física, rehabilitación integral y terapia ocupacional.",
-                ModalidadAtencion.PRESENCIAL,
-                Set.of(espFisio),
-                Set.of(srvFisio));
+                Set.of(espFisio), Set.of(srvFisio));
 
         crearUsuario("admin", "Admin123!", "Giancarlo Sánchez — Dirección",
                 "admin@sikalma.pe", RolUsuario.ADMINISTRADOR, null);
@@ -130,51 +127,51 @@ public class InicializadorDatosDemo implements ApplicationRunner {
         crearUsuario("antony", "Fisio123!", "Lic. Antony Pérez Fernández",
                 "antony@sikalma.pe", RolUsuario.FISIOTERAPEUTA, psiAntony);
 
-        Paciente pac1 = crearPaciente("74125896", "Lucía Andrea", "Mendoza Carrillo",
-                LocalDate.of(1998, 5, 14), "951478230", "lucia.mendoza@correo.pe", null, true);
-        Paciente pac2 = crearPaciente("76543210", "Mateo Sebastián", "Huamán Quispe",
-                LocalDate.of(2019, 8, 22), "964201478", "padres.mateo@correo.pe", "Carla Quispe (Madre)", true);
-        Paciente pac3 = crearPaciente("43218765", "Carlos Eduardo", "Rojas Paredes",
-                LocalDate.of(1991, 11, 3), "945112233", "carlos.rojas@correo.pe", null, true);
-        Paciente pac4 = crearPaciente("75918273", "Sofía Camila", "Vega Morales",
-                LocalDate.of(2005, 2, 19), "987650123", "sofia.vega@correo.pe", "Luis Vega (Padre)", true);
-        Paciente pac5 = crearPaciente("41928374", "Elena Patricia", "Flores Guzmán",
-                LocalDate.of(1987, 9, 10), "991234876", "elena.flores@correo.pe", null, false);
+        Paciente pac1 = guardarPaciente(basePaciente("74125896", "Lucía Andrea", "Mendoza Carrillo", LocalDate.of(1998, 5, 14)),
+                "951478230", "lucia.mendoza@correo.pe", null, true);
+        Paciente pac2 = guardarPaciente(basePaciente("76543210", "Mateo Sebastián", "Huamán Quispe", LocalDate.of(2019, 8, 22)),
+                "964201478", "padres.mateo@correo.pe", "Carla Quispe (Madre)", true);
+        Paciente pac3 = guardarPaciente(basePaciente("43218765", "Carlos Eduardo", "Rojas Paredes", LocalDate.of(1991, 11, 3)),
+                "945112233", "carlos.rojas@correo.pe", null, true);
+        Paciente pac4 = guardarPaciente(basePaciente("75918273", "Sofía Camila", "Vega Morales", LocalDate.of(2005, 2, 19)),
+                "987650123", "sofia.vega@correo.pe", "Luis Vega (Padre)", true);
+        Paciente pac5 = guardarPaciente(basePaciente("41928374", "Elena Patricia", "Flores Guzmán", LocalDate.of(1987, 9, 10)),
+                "991234876", "elena.flores@correo.pe", null, false);
 
         LocalDate hoy = LocalDate.now(reloj);
         List<Cita> citasDemo = List.of(
-                construirCita(pac1, psiMaryory, srvIndividual, hoy, LocalTime.of(9, 0),
+                conNota(baseCita(pac1, psiMaryory, srvIndividual, hoy, LocalTime.of(9, 0)),
                         ModalidadAtencion.PRESENCIAL, EstadoCita.ATENDIDA,
                         "Seguimiento por manejo de estrés laboral.",
                         "Paciente refiere mejoría en higiene del sueño y aplicación de técnicas de reestructuración cognitiva.",
                         "Ansiedad leve controlada"),
-                construirCita(pac2, psiJudith, srvInfantil, hoy, LocalTime.of(10, 30),
+                conNota(baseCita(pac2, psiJudith, srvInfantil, hoy, LocalTime.of(10, 30)),
                         ModalidadAtencion.PRESENCIAL, EstadoCita.EN_SALA,
                         "Sesión de estimulación temprana y lenguaje expresivo en SIKALMA KIDS.",
                         null, null),
-                construirCita(pac3, psiMaryory, srvPareja, hoy, LocalTime.of(15, 0),
+                conNota(baseCita(pac3, psiMaryory, srvPareja, hoy, LocalTime.of(15, 0)),
                         ModalidadAtencion.VIRTUAL, EstadoCita.CONFIRMADA,
                         "Acuerdos de comunicación asertiva en pareja.",
                         null, null),
-                construirCita(pac4, psiMaryory, srvVocacional, hoy, LocalTime.of(17, 0),
+                conNota(baseCita(pac4, psiMaryory, srvVocacional, hoy, LocalTime.of(17, 0)),
                         ModalidadAtencion.VIRTUAL, EstadoCita.PENDIENTE,
                         "Primera entrevista de orientación vocacional.",
                         null, null),
-                construirCita(pac5, psiAntony, srvFisio, hoy.plusDays(1), LocalTime.of(11, 0),
+                conNota(baseCita(pac5, psiAntony, srvFisio, hoy.plusDays(1), LocalTime.of(11, 0)),
                         ModalidadAtencion.PRESENCIAL, EstadoCita.CONFIRMADA,
                         "Evaluación postural cervical.",
                         null, null),
-                construirCita(pac1, psiMaryory, srvIndividual, hoy.minusDays(2), LocalTime.of(16, 0),
+                conNota(baseCita(pac1, psiMaryory, srvIndividual, hoy.minusDays(2), LocalTime.of(16, 0)),
                         ModalidadAtencion.VIRTUAL, EstadoCita.ATENDIDA,
                         "Control quincenal emocional.",
                         "Se consolidan estrategias de autorregulación y plan semanal de autocuidado.",
                         "Evolución favorable"),
-                construirCita(pac2, psiJudith, srvInfantil, hoy.minusDays(1), LocalTime.of(9, 30),
+                conNota(baseCita(pac2, psiJudith, srvInfantil, hoy.minusDays(1), LocalTime.of(9, 30)),
                         ModalidadAtencion.PRESENCIAL, EstadoCita.ATENDIDA,
                         "Refuerzo de motricidad fina y juego simbólico.",
                         "Buena respuesta a actividades de clasificación por colores y turnos.",
                         "Desarrollo acorde a edad"),
-                construirCita(pac3, psiAntony, srvFisio, hoy.minusDays(3), LocalTime.of(18, 0),
+                conNota(baseCita(pac3, psiAntony, srvFisio, hoy.minusDays(3), LocalTime.of(18, 0)),
                         ModalidadAtencion.PRESENCIAL, EstadoCita.CANCELADA,
                         "Reprogramación solicitada por viaje laboral.",
                         null, null));
@@ -199,20 +196,24 @@ public class InicializadorDatosDemo implements ApplicationRunner {
         return servicioRepositorio.save(s);
     }
 
-    private Psicologo crearPsicologo(
-            String dni, String nombres, String apellidos, String colegiatura,
-            String telefono, String correo, String resumen, ModalidadAtencion modalidad,
-            Set<Especialidad> especialidades, Set<Servicio> servicios) {
+    private Psicologo basePsicologo(
+            String dni, String nombres, String apellidos, String colegiatura, ModalidadAtencion modalidad) {
         Psicologo p = new Psicologo();
         p.setTipoDocumento(TipoDocumento.DNI);
         p.setNumeroDocumento(dni);
         p.setNombres(nombres);
         p.setApellidos(apellidos);
         p.setColegiatura(colegiatura);
+        p.setModalidad(modalidad);
+        return p;
+    }
+
+    private Psicologo guardarPsicologo(
+            Psicologo p, String telefono, String correo, String resumen,
+            Set<Especialidad> especialidades, Set<Servicio> servicios) {
         p.setTelefono(telefono);
         p.setCorreo(correo);
         p.setDescripcionProfesional(resumen);
-        p.setModalidad(modalidad);
         p.setEspecialidades(new LinkedHashSet<>(especialidades));
         p.setServicios(new LinkedHashSet<>(servicios));
         return psicologoRepositorio.save(p);
@@ -232,27 +233,28 @@ public class InicializadorDatosDemo implements ApplicationRunner {
         usuarioRepositorio.save(u);
     }
 
-    private Paciente crearPaciente(
-            String dni, String nombres, String apellidos, LocalDate fechaNacimiento,
-            String telefono, String correo, String apoderado, boolean consentimiento) {
+    private Paciente basePaciente(String dni, String nombres, String apellidos, LocalDate fechaNacimiento) {
         Paciente p = new Paciente();
         p.setTipoDocumento(TipoDocumento.DNI);
         p.setNumeroDocumento(dni);
         p.setNombres(nombres);
         p.setApellidos(apellidos);
         p.setFechaNacimiento(fechaNacimiento);
+        p.setDireccion("Huánuco, Perú");
+        return p;
+    }
+
+    private Paciente guardarPaciente(
+            Paciente p, String telefono, String correo, String apoderado, boolean consentimiento) {
         p.setTelefono(telefono);
         p.setCorreo(correo);
-        p.setDireccion("Huánuco, Perú");
         p.setApoderado(apoderado);
         p.setConsentimientoRegistrado(consentimiento);
         return pacienteRepositorio.save(p);
     }
 
-    private Cita construirCita(
-            Paciente paciente, Psicologo psicologo, Servicio servicio,
-            LocalDate fecha, LocalTime horaInicio, ModalidadAtencion modalidad,
-            EstadoCita estado, String motivo, String notaEvolucion, String diagnostico) {
+    private Cita baseCita(
+            Paciente paciente, Psicologo psicologo, Servicio servicio, LocalDate fecha, LocalTime horaInicio) {
         Cita c = new Cita();
         c.setPaciente(paciente);
         c.setPsicologo(psicologo);
@@ -260,6 +262,12 @@ public class InicializadorDatosDemo implements ApplicationRunner {
         c.setFecha(fecha);
         c.setHoraInicio(horaInicio);
         c.setDuracionMinutos(servicio.getDuracionMinutos());
+        return c;
+    }
+
+    private Cita conNota(
+            Cita c, ModalidadAtencion modalidad, EstadoCita estado,
+            String motivo, String notaEvolucion, String diagnostico) {
         c.setModalidad(modalidad);
         c.setEstado(estado);
         c.setMotivoConsulta(motivo);

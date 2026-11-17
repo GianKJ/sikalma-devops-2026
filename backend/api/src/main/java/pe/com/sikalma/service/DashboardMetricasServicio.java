@@ -27,8 +27,11 @@ import pe.com.sikalma.repository.UsuarioSistemaRepositorio;
 @Service
 public class DashboardMetricasServicio {
 
+    private static final String COLOR_SALVIA = "#315f58";
+    private static final String COLOR_TERRACOTA = "#d68651";
+
     private static final List<String> PALETA_SIKALMA = List.of(
-            "#315f58", "#d68651", "#57402e", "#fac8a9", "#75685e", "#2d6a4f");
+            COLOR_SALVIA, COLOR_TERRACOTA, "#57402e", "#fac8a9", "#75685e", "#2d6a4f");
 
     private final PacienteRepositorio pacienteRepositorio;
     private final PsicologoRepositorio psicologoRepositorio;
@@ -77,8 +80,8 @@ public class DashboardMetricasServicio {
         long virtuales = citas.stream().filter(c -> c.getModalidad() == ModalidadAtencion.VIRTUAL).count();
 
         List<SerieGraficoDto> porEstado = List.of(
-                new SerieGraficoDto("Pendientes", pendientes, "#d68651"),
-                new SerieGraficoDto("Confirmadas", confirmadas, "#315f58"),
+                new SerieGraficoDto("Pendientes", pendientes, COLOR_TERRACOTA),
+                new SerieGraficoDto("Confirmadas", confirmadas, COLOR_SALVIA),
                 new SerieGraficoDto("En sala", enSala, "#2d6a4f"),
                 new SerieGraficoDto("Atendidas", atendidas, "#57402e"),
                 new SerieGraficoDto("Canceladas", canceladas, "#a53d3d"));
@@ -86,8 +89,8 @@ public class DashboardMetricasServicio {
         List<SerieGraficoDto> porServicio = construirSeriePorServicio(citas);
 
         List<SerieGraficoDto> porModalidad = List.of(
-                new SerieGraficoDto("Presencial", presenciales, "#315f58"),
-                new SerieGraficoDto("Virtual", virtuales, "#d68651"));
+                new SerieGraficoDto("Presencial", presenciales, COLOR_SALVIA),
+                new SerieGraficoDto("Virtual", virtuales, COLOR_TERRACOTA));
 
         List<Cita> proximas = citas.stream()
                 .filter(c -> c.getEstado() != EstadoCita.CANCELADA)
@@ -124,7 +127,7 @@ public class DashboardMetricasServicio {
         if (totalCitas <= 0 || canceladas >= totalCitas) {
             return 0;
         }
-        return (int) Math.round(((double) (totalCitas - canceladas) * 100.0) / totalCitas);
+        return (int) Math.round(((totalCitas - canceladas) * 100.0) / totalCitas);
     }
 
     private long contarPorEstado(List<Cita> citas, EstadoCita estado) {
